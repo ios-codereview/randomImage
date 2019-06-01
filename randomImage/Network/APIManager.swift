@@ -25,17 +25,19 @@ class APIManager {
     func getDate() {
         let urlRequest = URLRequestBuilder(apiResource: managerApiResource, nil, nil).build()
         print("!")
-        urlSession.dataTask(with: urlRequest) { (data, response, error) in
-            print("2")
+        let datatask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
             if let error = error {
                 print(error)
                 return
             }
-
-            print(3)
-            print(data)
-
+            
+            if let data = data {
+                print(data)
+            } else {
+                print("data is nil")
+            }
         }
+        datatask.resume()
     }
 }
 
