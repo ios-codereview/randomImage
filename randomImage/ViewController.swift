@@ -14,6 +14,13 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let test = TestResource(urlString: "https://jsonplaceholder.typicode.com/posts/1")
+        let manager = APIManager.init(resource: test)
+        manager.getDate()
+    }
 
 
 }

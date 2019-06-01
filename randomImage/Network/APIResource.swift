@@ -17,10 +17,13 @@ enum HTTPMethod: String {
 }
 
 protocol APIResource {
-    var host: String { get set }
-    var path: String { get set }
+    var urlString: String? { get set }
+    var url: URL? { get set }
+    var host: String? { get set }
+    /// path component와 다르다 
+    var paths: [String]? { get set }
     var method: HTTPMethod { get set }
-    var query: [String: String]? { get set }
-    var body: [String: Any]? { get set }
-    var headers: [String: Any]? { get set }
+    var query: [String: String?]? { get set }
+//    var body: [String: Any]? { get set }
+//    var headers: [String: Any]? { get set }
 }
