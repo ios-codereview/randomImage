@@ -18,8 +18,14 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let test = TestResource(urlString: "https://jsonplaceholder.typicode.com/posts/1")
-        let manager = APIManager.init(resource: test)
-        manager.getDate()
+        let manager = APIManager<TestModel>(resource: test)
+        manager.getSimpleDate { (data, url, err) in
+            if let data = data {
+                print(data)
+            }
+        }
+        
+        
     }
 
 
