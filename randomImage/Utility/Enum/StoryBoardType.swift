@@ -21,8 +21,9 @@ enum StoryBoardType: String {
     
     var initialViewController: UIViewController {
         let mainBundle = Bundle(identifier: "com.onemoon.studio.randomImage")
-        guard let initialViewController = UIStoryboard(name: self.rawValue, bundle: mainBundle).instantiateInitialViewController()
-            else { fatalError("Error with \(self) initial View Controller") }
+        guard let initialViewController = UIStoryboard(name: self.rawValue, bundle: mainBundle).instantiateInitialViewController() else {
+            fatalError("Error with \(self) initial View Controller")
+        }
         return initialViewController
     }
 }
