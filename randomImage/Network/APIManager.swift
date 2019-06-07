@@ -7,40 +7,20 @@
 //
 
 import Foundation
+import RequestBuilder
 
-class APIManager<JSONModel: Codable> {
+class APIManager {
     
-    var managerApiResource: TestResource
-    //static 자체가 lazy 이기 때문에 lazy를 쓰지 않아도 된다.
-    lazy var urlSession = {
-        // TODO: Configuration
-       return URLSession(configuration: .default)
+    var apiResource: APIResource
+    lazy var urlRequest: URLRequest = {
+        return RequestBuilder(apiResource: self.apiResource).build()
     }()
     
-    init(resource: TestResource) {
-        self.managerApiResource = resource
+    init(apiResource: APIResource) {
+        self.apiResource = apiResource
     }
     
-    // TODO: Completion
-    func getSimpleDate(completion: @escaping (_ data: JSONModel?, _ response: URLResponse?, _ error: Error?) -> Void)  {
-        let urlRequest = URLRequestBuilder(apiResource: managerApiResource, nil, nil).build()
-        let datatask = urlSession.dataTask(with: urlRequest) { (data, response, error) in
-            if let error = error {
-                completion(nil, response, error)
-            }
-            
-            if let data = data {
-                do {
-                    let model: JSONModel = try JSONDecoder().decode(JSONModel.self, from: data)
-                    completion(model, response, nil)
-                } catch {
-                    completion(nil, response, error)
-                }
-            }
-            
-            completion(nil, response, error)
-        }
-        datatask.resume()
+    func images() {
+        
     }
 }
-
