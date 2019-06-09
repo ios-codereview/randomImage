@@ -11,16 +11,76 @@ import RequestBuilder
 
 class APIManager {
     
-    var apiResource: APIResource
+    var apiResource: APIResource {
+        didSet {
+            urlRequest = RequestBuilder(apiResource: self.apiResource).build()
+        }
+    }
     lazy var urlRequest: URLRequest = {
         return RequestBuilder(apiResource: self.apiResource).build()
     }()
+    private let urlSession = URLSession(configuration: .default)
     
     init(apiResource: APIResource) {
         self.apiResource = apiResource
     }
     
-    func images() {
+    // error 처리 우아하게 해보자
+    func imageItems(keyword: String, completion: @escaping (_ imageData: [ImageItem]?, _ error: Error? ) -> Void ) {
+        apiResource.query = NaverSearchQuery(query: keyword).queryItems()
+        urlSession.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                completion(nil, error)
+            }
+            
+            guard let data = data else {
+                print("data is nil")
+                completion(nil, nil)
+                return
+            }
+            
+            do {
+                let responseData = try JSONDecoder().decode(NaverImageSearchResult.self, from: data)
+                completion(responseData.items, nil)
+            } catch {
+                print("decode Error")
+                completion(nil, error)
+            }
+        
+        }.resume()
         
     }
-}
+    
+    func image(_ urlString: String, completion: @escaping (_ image: UIImage?) -> Void) {
+//        print("image Request \(urlString)")
+        guard let url = URL(string: urlString) else {
+            completion(nil)
+            return
+        }
+        urlSession.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                completion(nil)
+            }
+            
+            guard let data = data else {
+                print("data is nil")
+                completion(nil)
+                return
+            }
+            
+            do {
+                guard let image = UIImage(data: data) else {
+                    print("image is nil")
+                    completion(nil)
+                    return
+                }
+                completion(image)
+            } catch {
+                print("data error")
+                completion(nil)
+            }
+        }.resume()
+    }
+ }

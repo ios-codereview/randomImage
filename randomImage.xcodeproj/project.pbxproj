@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9ABD01622AA78C7009C9A80 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */; };
+		D9ABD01722AA78C7009C9A80 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */; };
+		D9ABD01B22AA7EBD009C9A80 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */; };
+		D9ABD01F22AB7DCF009C9A80 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01E22AB7DCF009C9A80 /* ResponseModel.swift */; };
+		D9ABD02122ABBB6F009C9A80 /* RequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD02022ABBB6F009C9A80 /* RequestModel.swift */; };
+		D9ABD02322ABBBBA009C9A80 /* SecretKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD02222ABBBBA009C9A80 /* SecretKey.swift */; };
+		D9ABD02522ABDC75009C9A80 /* RequestEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD02422ABDC75009C9A80 /* RequestEnum.swift */; };
 		D9C22DF722A265D6008FB833 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C22DF622A265D6008FB833 /* APIManager.swift */; };
 		D9C22EEE22A55672008FB833 /* RequestBuilder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9C22EEB22A55655008FB833 /* RequestBuilder.framework */; };
 		D9C22EEF22A55672008FB833 /* RequestBuilder.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D9C22EEB22A55655008FB833 /* RequestBuilder.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -20,6 +27,8 @@
 		D9E1A3AC229D80B70076613C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D9E1A3AA229D80B70076613C /* Main.storyboard */; };
 		D9E1A3AE229D80B80076613C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D9E1A3AD229D80B80076613C /* Assets.xcassets */; };
 		D9E1A3B1229D80B80076613C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D9E1A3AF229D80B80076613C /* LaunchScreen.storyboard */; };
+		D9E9E35622AC1FED003AD328 /* QueryStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E9E35522AC1FED003AD328 /* QueryStruct.swift */; };
+		D9E9E35822AC2247003AD328 /* UINib.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E9E35722AC2247003AD328 /* UINib.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +70,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
+		D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageTableViewCell.xib; sourceTree = "<group>"; };
+		D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		D9ABD01E22AB7DCF009C9A80 /* ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
+		D9ABD02022ABBB6F009C9A80 /* RequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestModel.swift; sourceTree = "<group>"; };
+		D9ABD02222ABBBBA009C9A80 /* SecretKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretKey.swift; sourceTree = "<group>"; };
+		D9ABD02422ABDC75009C9A80 /* RequestEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestEnum.swift; sourceTree = "<group>"; };
 		D9C22DF622A265D6008FB833 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		D9C22EE522A55654008FB833 /* RequestBuilder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RequestBuilder.xcodeproj; path = ../RequestBuilder/RequestBuilder.xcodeproj; sourceTree = "<group>"; };
 		D9C22EF322A56B65008FB833 /* MainPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +91,8 @@
 		D9E1A3AD229D80B80076613C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D9E1A3B0229D80B80076613C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D9E1A3B2229D80B80076613C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D9E9E35522AC1FED003AD328 /* QueryStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryStruct.swift; sourceTree = "<group>"; };
+		D9E9E35722AC2247003AD328 /* UINib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINib.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +107,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D9ABD01922AA7EB0009C9A80 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */,
+				D9E9E35522AC1FED003AD328 /* QueryStruct.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		D9C22EE622A55654008FB833 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +128,7 @@
 		D9C22EF522A57884008FB833 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				D9ABD01922AA7EB0009C9A80 /* Protocol */,
 				D9C22EF922A57CB8008FB833 /* Enum */,
 				D9C22EF622A57B24008FB833 /* Extnesion */,
 			);
@@ -110,6 +138,7 @@
 		D9C22EF622A57B24008FB833 /* Extnesion */ = {
 			isa = PBXGroup;
 			children = (
+				D9E9E35722AC2247003AD328 /* UINib.swift */,
 			);
 			path = Extnesion;
 			sourceTree = "<group>";
@@ -138,6 +167,8 @@
 			children = (
 				D9C22F0322AA3A40008FB833 /* ImageTableViewController.swift */,
 				D9C22F0922AA3A93008FB833 /* ImageTableView.storyboard */,
+				D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */,
+				D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */,
 			);
 			path = TableView;
 			sourceTree = "<group>";
@@ -186,6 +217,10 @@
 			isa = PBXGroup;
 			children = (
 				D9C22DF622A265D6008FB833 /* APIManager.swift */,
+				D9ABD02022ABBB6F009C9A80 /* RequestModel.swift */,
+				D9ABD02422ABDC75009C9A80 /* RequestEnum.swift */,
+				D9ABD01E22AB7DCF009C9A80 /* ResponseModel.swift */,
+				D9ABD02222ABBBBA009C9A80 /* SecretKey.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -276,6 +311,7 @@
 				D9C22F0A22AA3A93008FB833 /* ImageTableView.storyboard in Resources */,
 				D9E1A3B1229D80B80076613C /* LaunchScreen.storyboard in Resources */,
 				D9E1A3AE229D80B80076613C /* Assets.xcassets in Resources */,
+				D9ABD01722AA78C7009C9A80 /* ImageTableViewCell.xib in Resources */,
 				D9E1A3AC229D80B70076613C /* Main.storyboard in Resources */,
 				D9C22F0822AA3A8A008FB833 /* ImageCollectionView.storyboard in Resources */,
 			);
@@ -288,11 +324,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9ABD01622AA78C7009C9A80 /* ImageTableViewCell.swift in Sources */,
+				D9E9E35822AC2247003AD328 /* UINib.swift in Sources */,
 				D9C22F0622AA3A4F008FB833 /* ImageCollectionViewController.swift in Sources */,
 				D9C22EFB22A57CC2008FB833 /* StoryBoardType.swift in Sources */,
 				D9C22EF422A56B65008FB833 /* MainPageViewController.swift in Sources */,
+				D9ABD01B22AA7EBD009C9A80 /* Reusable.swift in Sources */,
+				D9ABD02122ABBB6F009C9A80 /* RequestModel.swift in Sources */,
+				D9ABD01F22AB7DCF009C9A80 /* ResponseModel.swift in Sources */,
+				D9ABD02322ABBBBA009C9A80 /* SecretKey.swift in Sources */,
 				D9C22F0422AA3A40008FB833 /* ImageTableViewController.swift in Sources */,
 				D9C22DF722A265D6008FB833 /* APIManager.swift in Sources */,
+				D9ABD02522ABDC75009C9A80 /* RequestEnum.swift in Sources */,
+				D9E9E35622AC1FED003AD328 /* QueryStruct.swift in Sources */,
 				D9E1A3A7229D80B70076613C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
