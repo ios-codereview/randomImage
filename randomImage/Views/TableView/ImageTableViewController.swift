@@ -120,16 +120,20 @@ extension ImageTableViewController: UITableViewDataSource {
         }
         let individualItem = searchedItemList[indexPath.row]
         cell.configure(individualItem.title)
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
-            self.apiManager.image(individualItem.link) { (image) in
+        DispatchQueue.global().async {
+            CacheImageManager.image(urlString: individualItem.link, completion: { (image) in
                 guard let image = image else { return }
                 DispatchQueue.main.async {
                     cell.configure(image)
                 }
-            }
+            })
+//            self.apiManager.downloadImage(individualItem.link) { (image) in
+//                guard let image = image else { return }
+//                DispatchQueue.main.async {
+//                    cell.configure(image)
+//                }
+//            }
         }
-        
         return cell
     }
 

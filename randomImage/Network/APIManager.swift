@@ -11,24 +11,35 @@ import RequestBuilder
 
 class APIManager {
     
+    // MARK: - Property
+    
     var apiResource: APIResource {
         didSet {
             urlRequest = RequestBuilder(apiResource: self.apiResource).build()
         }
     }
+    
     lazy var urlRequest: URLRequest = {
         return RequestBuilder(apiResource: self.apiResource).build()
     }()
+    
     private let urlSession = URLSession(configuration: .default)
+    
+    // MARK: - Initializer
     
     init(apiResource: APIResource) {
         self.apiResource = apiResource
     }
     
+    // MARK: - Instance Method
+    
     // error 처리 우아하게 해보자
     func imageItems(keyword: String, completion: @escaping (_ imageData: [ImageItem]?, _ error: Error? ) -> Void ) {
+        
         apiResource.query = NaverSearchQuery(query: keyword).queryItems()
+
         urlSession.dataTask(with: urlRequest) { (data, response, error) in
+            
             if let error = error {
                 print(error.localizedDescription)
                 completion(nil, error)
@@ -52,13 +63,16 @@ class APIManager {
         
     }
     
-    func image(_ urlString: String, completion: @escaping (_ image: UIImage?) -> Void) {
-//        print("image Request \(urlString)")
+    // MARK: - Static Method
+    
+    static func downloadImage(_ urlString: String, completion: @escaping (_ image: UIImage?) -> Void) {
+        
         guard let url = URL(string: urlString) else {
             completion(nil)
             return
         }
-        urlSession.dataTask(with: url) { (data, response, error) in
+        
+        URLSession(configuration: .default).dataTask(with: url) { (data, response, error) in
             if let error = error {
                 print(error.localizedDescription)
                 completion(nil)

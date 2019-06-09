@@ -1,5 +1,5 @@
 //
-//  RequestEnum.swift
+//  RequestQueryStruct.swift
 //  randomImage
 //
 //  Created by Hyeontae on 08/06/2019.
@@ -11,7 +11,7 @@ import Foundation
 struct NaverSearchQuery: QueryStruct {
     
     var query: String
-    var display: Int? = 5
+    var display: Int? = 10 
     var start: Int? = 1
     var sort: String?
     var filter: String?

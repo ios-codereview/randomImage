@@ -12,9 +12,12 @@ class MainPageViewController: UIPageViewController {
 
     // MARK: - Property
     
-    private lazy var customPageViewControllers: [UIViewController] = {
-        return [StoryBoardType.imageTableView.initialViewController , StoryBoardType.imageCollectionView.initialViewController]
-    }()
+    private let pageViewControllersType = [StoryBoardType.imageTableView, StoryBoardType.imageCollectionView]
+
+    private lazy var customPageViewControllers = Array<UIViewController?>(repeating: nil, count: self.pageViewControllersType.count)
+//    private lazy var customPageViewControllers: [UIViewController?] = {
+////        return [StoryBoardType.imageTableView.initialViewController , StoryBoardType.imageCollectionView.initialViewController]
+//    }()
     private var nowPageIndex = 0
     
     // MARK: - Life Cycle
@@ -30,7 +33,10 @@ class MainPageViewController: UIPageViewController {
     private func setPageViewController() {
         self.dataSource = self
         self.delegate = self
-        guard let firstViewController = customPageViewControllers.first else { fatalError("first View Controller Error") }
+//        guard let firstViewController = customPageViewControllers.first! else { fatalError("first View Controller Error") }
+//        customPageViewControllers[0] = firstViewController
+        guard let firstViewController: UIViewController = pageViewControllersType.first!.initialViewController else { fatalError("first View Controller Error") }
+        customPageViewControllers[0] = firstViewController
         setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
     }
     
@@ -49,10 +55,16 @@ class MainPageViewController: UIPageViewController {
 extension MainPageViewController: UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        
         guard let viewControllerIndex = customPageViewControllers.firstIndex(of: viewController) else {
             return nil
         }
+        
         let previousIndex = viewControllerIndex - 1
+        if previousIndex >= 0 && customPageViewControllers[previousIndex] == nil {
+            customPageViewControllers[previousIndex] = pageViewControllersType[previousIndex].initialViewController
+        }
+        
         if previousIndex < 0 {
             return nil
         }
@@ -60,13 +72,19 @@ extension MainPageViewController: UIPageViewControllerDataSource {
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        
         guard let viewControllerIndex = customPageViewControllers.firstIndex(of: viewController) else {
             return nil
         }
         let nextIndex = viewControllerIndex + 1
+        if nextIndex < customPageViewControllers.count &&  customPageViewControllers[nextIndex] == nil {
+            customPageViewControllers[nextIndex] = pageViewControllersType[nextIndex].initialViewController
+        }
+        
         if nextIndex >= customPageViewControllers.count {
             return nil
         }
+        
         return customPageViewControllers[nextIndex]
     }
     
