@@ -65,7 +65,7 @@ class APIManager {
     
     // MARK: - Static Method
     
-    static func downloadImage(_ urlString: String, completion: @escaping (_ image: UIImage?) -> Void) {
+    static func downloadImageData(_ urlString: String, completion: @escaping (_ data: Data?) -> Void) {
         
         guard let url = URL(string: urlString) else {
             completion(nil)
@@ -84,17 +84,8 @@ class APIManager {
                 return
             }
             
-            do {
-                guard let image = UIImage(data: data) else {
-                    print("image is nil")
-                    completion(nil)
-                    return
-                }
-                completion(image)
-            } catch {
-                print("data error")
-                completion(nil)
-            }
+            completion(data)
+            
         }.resume()
     }
  }

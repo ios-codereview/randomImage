@@ -18,11 +18,13 @@ class ImageTableViewController: UIViewController {
     
     private let cellMargin: CGFloat = 8.0
     private var searchedItemList: [ImageItem] = []
+    
     private lazy var searchAPI: APIResource = {
         var api = ImageSearchRequestAPI(urlString: "https://openapi.naver.com/v1/search/image")
         api.headers = [SecretKey.id.key: SecretKey.id.value, SecretKey.secret.key: SecretKey.secret.value]
         return api
     }()
+    
     private lazy var apiManager: APIManager = {
         let manager = APIManager(apiResource: self.searchAPI)
         return manager
@@ -43,7 +45,7 @@ class ImageTableViewController: UIViewController {
         setTableView()
     }
     
-    // TODO: Test Logic
+    // TODO: Test Logic -> Search Naver
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         sendRequest("Naver")
@@ -51,8 +53,9 @@ class ImageTableViewController: UIViewController {
     
     // MARK: - Method
     
+    /// Large Title 관련된 Navigation View Controller를 설정해준다.
     private func setNavigationBar() {
-        // 라지 타이틀을 사용하면 push 되었을 때 그 영역이 같이 넘어간다.
+        // 라지 타이틀을 사용하면 push 되었을 때 그 영역이 같이 넘어간다?!
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = .white
         navigationController?.title = "TableView"
@@ -61,13 +64,19 @@ class ImageTableViewController: UIViewController {
         self.definesPresentationContext = true
     }
     
+    /// 테이블뷰 설정
     private func setTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
+        tableView.separatorInset = UIEdgeInsets.zero
         tableView.register(UINib(ImageTableViewCell.self), forCellReuseIdentifier: ImageTableViewCell.reuseIdentifier)
     }
     
+    
+    /// keyword 값으로 검색하는 로직
+    ///
+    /// - Parameter keyword: 검색할 키워드
     private func sendRequest(_ keyword: String) {
         // indicator 추가
         title = keyword
@@ -88,51 +97,63 @@ class ImageTableViewController: UIViewController {
         }
     }
     
+    /// 각각의 셀의 높이를 계산하기 위한 로직
     private func cellHeight(_ indexPath: IndexPath) -> CGFloat {
         let item = searchedItemList[indexPath.row]
-        // TODO: NSAttributedString
-        let viewFrame = view.frame
+        let viewFrameWidth = view.frame.width
         let attrString = NSAttributedString(
             string: item.title,
             attributes: [ NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.0) ])
         let boundingRect = attrString.boundingRect(
-            with: CGSize(width: viewFrame.width - 16, height: CGFloat.greatestFiniteMagnitude),
+            with: CGSize(width: viewFrameWidth - 16, height: CGFloat.greatestFiniteMagnitude),
             options: [ NSStringDrawingOptions.usesLineFragmentOrigin ],
             context: nil)
-        let imageRatio = CGFloat(Int(item.sizeheight)!) / CGFloat(Int(item.sizewidth)!)
         // TODO: Inset 사용? 확인해보자
-        return ( ceil(boundingRect.height) + ( 2 * cellMargin ) ) + ( imageRatio * viewFrame.width ) + cellMargin
+        return ( ceil(boundingRect.height) + ( 2 * cellMargin ) ) + imageViewSize(item, viewFrameWidth).height + cellMargin
+    }
+    
+    /// 이미지뷰의 사이즈를 계산하기 위한 로직
+    private func imageViewSize(_ info: ImageItem,_ viewFrameWidth: CGFloat) -> CGSize {
+        let imageRatio = CGFloat(Int(info.sizeheight)!) / CGFloat(Int(info.sizewidth)!)
+        return CGSize(width: viewFrameWidth, height: ( imageRatio * viewFrameWidth ))
     }
 }
 
 // MARK: - UITableViewDataSource
 
 extension ImageTableViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // 여기서 값을 늘리면 되나? 아니면 다른 것을 사용해야 할까?
         return searchedItemList.count
     }
     
+    /// 다운샘플링 된 이미지가 cell 에 뿌려진다.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.reuseIdentifier) as? ImageTableViewCell else {
             return UITableViewCell()
         }
         let individualItem = searchedItemList[indexPath.row]
+        let viewFrameWidth = view.frame.width
         cell.configure(individualItem.title)
-        DispatchQueue.global().async {
-            CacheImageManager.image(urlString: individualItem.link, completion: { (image) in
-                guard let image = image else { return }
-                DispatchQueue.main.async {
-                    cell.configure(image)
-                }
-            })
-//            self.apiManager.downloadImage(individualItem.link) { (image) in
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+//            CacheImageManager.image(urlString: individualItem.link, completion: { (image) in
 //                guard let image = image else { return }
 //                DispatchQueue.main.async {
 //                    cell.configure(image)
 //                }
-//            }
+//            })
+            CacheImageManager.downSampledImage(
+                urlString: individualItem.link,
+                viewSize: self.imageViewSize(individualItem, viewFrameWidth),
+                scale: UIScreen.main.scale,
+                    completion: { (image) in
+                    guard let image = image else { return }
+                    DispatchQueue.main.async {
+                        cell.configure(image)
+                    }
+                })
         }
         return cell
     }

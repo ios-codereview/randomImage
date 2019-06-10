@@ -25,7 +25,8 @@ class ImageTableViewCell: UITableViewCell, Reusable {
     }
     
     override func prepareForReuse() {
-        centerImageView.image = nil
+//        centerImageView.image = nil
+        centerImageView.image = UIImage(named: "defaultImage")
     }
     
     func configure(_ title: String) {
