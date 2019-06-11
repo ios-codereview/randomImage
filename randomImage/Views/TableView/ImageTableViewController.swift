@@ -17,6 +17,8 @@ class ImageTableViewController: UIViewController {
     // MARK: - Property
     
     private let cellMargin: CGFloat = 8.0
+    private var numberOfImagePerPage: Int = 20
+    private var pageNumber: Int = 1
     private var searchedItemList: [ImageItem] = []
     
     private lazy var searchAPI: APIResource = {
@@ -48,7 +50,7 @@ class ImageTableViewController: UIViewController {
     // TODO: Test Logic -> Search Naver
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        sendRequest("Naver")
+        sendRequest("Naver", page: pageNumber)
     }
     
     // MARK: - Method
@@ -68,8 +70,10 @@ class ImageTableViewController: UIViewController {
     private func setTableView() {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.prefetchDataSource = self
+        tableView.showsVerticalScrollIndicator = false
         tableView.tableFooterView = UIView()
-        tableView.separatorInset = UIEdgeInsets.zero
+        tableView.separatorStyle = .none
         tableView.register(UINib(ImageTableViewCell.self), forCellReuseIdentifier: ImageTableViewCell.reuseIdentifier)
     }
     
@@ -77,10 +81,10 @@ class ImageTableViewController: UIViewController {
     /// keyword 값으로 검색하는 로직
     ///
     /// - Parameter keyword: 검색할 키워드
-    private func sendRequest(_ keyword: String) {
+    private func sendRequest(_ keyword: String, page number: Int) {
         // indicator 추가
         title = keyword
-        apiManager.imageItems(keyword: keyword) { [weak self] (items, error) in
+        apiManager.imageItems(keyword: keyword, page: number) { [weak self] (items, error) in
             guard let self = self,
                 let items = items else {
                     if let error = error {
@@ -90,9 +94,10 @@ class ImageTableViewController: UIViewController {
                     }
                     return
             }
-            self.searchedItemList = items
+            self.searchedItemList.append(contentsOf: items)
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+//                self.debug()
             }
         }
     }
@@ -117,6 +122,18 @@ class ImageTableViewController: UIViewController {
         let imageRatio = CGFloat(Int(info.sizeheight)!) / CGFloat(Int(info.sizewidth)!)
         return CGSize(width: viewFrameWidth, height: ( imageRatio * viewFrameWidth ))
     }
+    
+    /// 요청이 더 필요한 경우
+    private func loadMoreImages() {
+        guard let nowTitle = title else { return }
+        pageNumber += 1
+        sendRequest(nowTitle, page: pageNumber)
+        
+    }
+    
+    private func debug(index: IndexPath) {
+        print("\(index) => \(searchedItemList[index.row].title)")
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -133,17 +150,12 @@ extension ImageTableViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.reuseIdentifier) as? ImageTableViewCell else {
             return UITableViewCell()
         }
+        cell.selectionStyle = .none
         let individualItem = searchedItemList[indexPath.row]
         let viewFrameWidth = view.frame.width
         cell.configure(individualItem.title)
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-//            CacheImageManager.image(urlString: individualItem.link, completion: { (image) in
-//                guard let image = image else { return }
-//                DispatchQueue.main.async {
-//                    cell.configure(image)
-//                }
-//            })
             CacheImageManager.downSampledImage(
                 urlString: individualItem.link,
                 viewSize: self.imageViewSize(individualItem, viewFrameWidth),
@@ -157,6 +169,12 @@ extension ImageTableViewController: UITableViewDataSource {
         }
         return cell
     }
+    
+    private func debug() {
+        for (index, item) in searchedItemList.enumerated() {
+            print("\(index) =>  \(item.title)")
+        }
+    }
 
 }
 
@@ -165,6 +183,19 @@ extension ImageTableViewController: UITableViewDataSource {
 extension ImageTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight(indexPath)
+    }
+}
+
+// MARK: - UITableViewDataSourcePrefetching
+
+extension ImageTableViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        let totalImages = pageNumber * numberOfImagePerPage
+        for indexPath in indexPaths {
+            if tableView.contentOffset.y != 0 && indexPath.row == totalImages - 1 {
+                loadMoreImages()
+            }
+        }
     }
 }
 
@@ -179,7 +210,9 @@ extension ImageTableViewController: UISearchControllerDelegate {
 extension ImageTableViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchedText = searchBar.text {
-            sendRequest(searchedText)
+            pageNumber = 1
+            searchedItemList.removeAll()
+            sendRequest(searchedText, page: pageNumber)
             // 중간에 검색된 경우 취소하는 로직이 있어야 할듯?
         }
         searchBar.text = nil
