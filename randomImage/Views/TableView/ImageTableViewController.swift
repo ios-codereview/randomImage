@@ -17,6 +17,7 @@ class ImageTableViewController: UIViewController {
     // MARK: - Property
     
     private let cellMargin: CGFloat = 8.0
+    private let cellSeperatorHeight: CGFloat = 10.0
     private var numberOfImagePerPage: Int = 20
     private var pageNumber: Int = 1
     private var searchedItemList: [ImageItem] = []
@@ -74,9 +75,13 @@ class ImageTableViewController: UIViewController {
         tableView.showsVerticalScrollIndicator = false
         tableView.tableFooterView = UIView()
         tableView.separatorStyle = .none
-        tableView.register(UINib(ImageTableViewCell.self), forCellReuseIdentifier: ImageTableViewCell.reuseIdentifier)
+        tableView.registerReusableCell(ImageTableViewCell.self)
+        tableView.registerReusableCell(LoadingCell.self)
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
     
     /// keyword 값으로 검색하는 로직
     ///
@@ -96,7 +101,8 @@ class ImageTableViewController: UIViewController {
             }
             self.searchedItemList.append(contentsOf: items)
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+//                self.tableView.reloadData()
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
 //                self.debug()
             }
         }
@@ -104,23 +110,37 @@ class ImageTableViewController: UIViewController {
     
     /// 각각의 셀의 높이를 계산하기 위한 로직
     private func cellHeight(_ indexPath: IndexPath) -> CGFloat {
-        let item = searchedItemList[indexPath.row]
-        let viewFrameWidth = view.frame.width
-        let attrString = NSAttributedString(
-            string: item.title,
-            attributes: [ NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.0) ])
-        let boundingRect = attrString.boundingRect(
-            with: CGSize(width: viewFrameWidth - 16, height: CGFloat.greatestFiniteMagnitude),
-            options: [ NSStringDrawingOptions.usesLineFragmentOrigin ],
-            context: nil)
-        // TODO: Inset 사용? 확인해보자
-        return ( ceil(boundingRect.height) + ( 2 * cellMargin ) ) + imageViewSize(item, viewFrameWidth).height + cellMargin
+        if indexPath.section == 0 {
+            let item = searchedItemList[indexPath.row]
+            let viewFrameSize = view.frame.size
+            let attrString = NSAttributedString(
+                string: item.title,
+                attributes: [ NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17.0) ])
+            let boundingRect = attrString.boundingRect(
+                with: CGSize(width: viewFrameSize.width - 16, height: CGFloat.greatestFiniteMagnitude),
+                options: [ NSStringDrawingOptions.usesLineFragmentOrigin ],
+                context: nil)
+            // TODO: Inset 사용? 확인해보자
+            return ( ceil(boundingRect.height) + ( 2 * cellMargin ) ) + imageViewSize(item, viewFrameSize).height + cellSeperatorHeight
+        } else {
+            return 44.0
+        }
     }
     
     /// 이미지뷰의 사이즈를 계산하기 위한 로직
-    private func imageViewSize(_ info: ImageItem,_ viewFrameWidth: CGFloat) -> CGSize {
+    private func imageViewSize(_ info: ImageItem,_ viewFrameSize: CGSize) -> CGSize {
+        let viewFrameWidth = viewFrameSize.width
         let imageRatio = CGFloat(Int(info.sizeheight)!) / CGFloat(Int(info.sizewidth)!)
-        return CGSize(width: viewFrameWidth, height: ( imageRatio * viewFrameWidth ))
+        var resultHeight: CGFloat {
+            let imageHeightMultipliedByRatio = ( imageRatio * viewFrameWidth )
+            let halfHeightOfView = viewFrameSize.height / 2.0
+            if imageHeightMultipliedByRatio > halfHeightOfView {
+                return halfHeightOfView
+            } else {
+                return imageHeightMultipliedByRatio
+            }
+        }
+        return CGSize(width: viewFrameWidth, height: resultHeight)
     }
     
     /// 요청이 더 필요한 경우
@@ -140,34 +160,56 @@ class ImageTableViewController: UIViewController {
 
 extension ImageTableViewController: UITableViewDataSource {
     
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchedItemList.count
+        if section == 0 {
+            return searchedItemList.count
+        } else if section == 1 {
+            return 1
+        }
+        return 0
     }
     
     /// 다운샘플링 된 이미지가 cell 에 뿌려진다.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.reuseIdentifier) as? ImageTableViewCell else {
-            return UITableViewCell()
-        }
-        cell.selectionStyle = .none
-        let individualItem = searchedItemList[indexPath.row]
-        let viewFrameWidth = view.frame.width
-        cell.configure(individualItem.title)
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
-            CacheImageManager.downSampledImage(
-                urlString: individualItem.link,
-                viewSize: self.imageViewSize(individualItem, viewFrameWidth),
-                scale: UIScreen.main.scale,
+        if indexPath.section == 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.reuseIdentifier) as? ImageTableViewCell else {
+                return UITableViewCell()
+            }
+            cell.selectionStyle = .none
+            let individualItem = searchedItemList[indexPath.row]
+            let viewFrameSize = view.frame.size
+            cell.configure(individualItem.title)
+            DispatchQueue.global().async { [weak self] in
+                guard let self = self else { return }
+                CacheImageManager.downSampledImage(
+                    urlString: individualItem.link,
+                    viewSize: self.imageViewSize(individualItem, viewFrameSize),
+                    scale: UIScreen.main.scale,
                     completion: { (image) in
-                    guard let image = image else { return }
-                    DispatchQueue.main.async {
-                        cell.configure(image)
-                    }
+                        guard let image = image else { return }
+                        DispatchQueue.main.async {
+                            cell.configure(image)
+                        }
                 })
+            }
+            return cell
+            
+        } else {
+            // Loading
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LoadingCell.reuseIdentifier) as? LoadingCell else {
+                return UITableViewCell()
+            }
+            cell.loadingIndicator.startAnimating()
+            if tableView.contentOffset.y != 0 {
+                Timer.scheduledTimer(withTimeInterval: TimeInterval(1.0), repeats: false) { (_) in
+                    self.loadMoreImages()
+                    cell.loadingIndicator.stopAnimating()
+                }
+            }
+            return cell
         }
-        return cell
     }
     
     private func debug() {
@@ -190,12 +232,21 @@ extension ImageTableViewController: UITableViewDelegate {
 
 extension ImageTableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        let totalImages = pageNumber * numberOfImagePerPage
-        for indexPath in indexPaths {
-            if tableView.contentOffset.y != 0 && indexPath.row == totalImages - 1 {
-                loadMoreImages()
-            }
-        }
+        // loading을 보여줄 것이라면 prefetch에서 할 필요가 없다.
+//        for indexPath in indexPaths {
+//            if tableView.contentOffset.y != 0 && indexPath.section != 0 {
+//                Timer.scheduledTimer(withTimeInterval: TimeInterval(1.0), repeats: false) { (_) in
+//                    self.loadMoreImages()
+//                }
+//            }
+//        }
+        // Infinite Scroll
+//        let totalImages = pageNumber * numberOfImagePerPage
+//        for indexPath in indexPaths {
+//            if tableView.contentOffset.y != 0 && indexPath.row == totalImages - 1 {
+//                loadMoreImages()
+//            }
+//        }
     }
 }
 

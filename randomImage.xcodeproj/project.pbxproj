@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE612C3022B0D113003CD38E /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE612C2E22B0D113003CD38E /* LoadingCell.swift */; };
+		CE612C3122B0D113003CD38E /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE612C2F22B0D113003CD38E /* LoadingCell.xib */; };
+		CE612C3322B0D26B003CD38E /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE612C3222B0D26B003CD38E /* UITableView.swift */; };
+		CE612C3522B10159003CD38E /* TestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE612C3422B10159003CD38E /* TestCell.swift */; };
 		D9ABD01622AA78C7009C9A80 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */; };
 		D9ABD01722AA78C7009C9A80 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */; };
 		D9ABD01B22AA7EBD009C9A80 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */; };
@@ -71,6 +75,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CE612C2E22B0D113003CD38E /* LoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
+		CE612C2F22B0D113003CD38E /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
+		CE612C3222B0D26B003CD38E /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
+		CE612C3422B10159003CD38E /* TestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCell.swift; sourceTree = "<group>"; };
 		D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
 		D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageTableViewCell.xib; sourceTree = "<group>"; };
 		D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
@@ -141,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				D9E9E35722AC2247003AD328 /* UINib.swift */,
+				CE612C3222B0D26B003CD38E /* UITableView.swift */,
 			);
 			path = Extnesion;
 			sourceTree = "<group>";
@@ -171,6 +180,8 @@
 				D9C22F0922AA3A93008FB833 /* ImageTableView.storyboard */,
 				D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */,
 				D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */,
+				CE612C2E22B0D113003CD38E /* LoadingCell.swift */,
+				CE612C2F22B0D113003CD38E /* LoadingCell.xib */,
 			);
 			path = TableView;
 			sourceTree = "<group>";
@@ -180,6 +191,7 @@
 			children = (
 				D9C22F0522AA3A4F008FB833 /* ImageCollectionViewController.swift */,
 				D9C22F0722AA3A8A008FB833 /* ImageCollectionView.storyboard */,
+				CE612C3422B10159003CD38E /* TestCell.swift */,
 			);
 			path = CollectionView;
 			sourceTree = "<group>";
@@ -319,6 +331,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE612C3122B0D113003CD38E /* LoadingCell.xib in Resources */,
 				D9C22F0A22AA3A93008FB833 /* ImageTableView.storyboard in Resources */,
 				D9E1A3B1229D80B80076613C /* LaunchScreen.storyboard in Resources */,
 				D9E1A3AE229D80B80076613C /* Assets.xcassets in Resources */,
@@ -341,11 +354,14 @@
 				D9C22EFB22A57CC2008FB833 /* StoryBoardType.swift in Sources */,
 				D9C22EF422A56B65008FB833 /* MainPageViewController.swift in Sources */,
 				D9ABD01B22AA7EBD009C9A80 /* Reusable.swift in Sources */,
+				CE612C3322B0D26B003CD38E /* UITableView.swift in Sources */,
 				D9ABD02122ABBB6F009C9A80 /* RequestModel.swift in Sources */,
 				D9E9E35B22AD11B5003AD328 /* CacheImageManager.swift in Sources */,
 				D9ABD01F22AB7DCF009C9A80 /* ResponseModel.swift in Sources */,
 				D9ABD02322ABBBBA009C9A80 /* SecretKey.swift in Sources */,
+				CE612C3022B0D113003CD38E /* LoadingCell.swift in Sources */,
 				D9C22F0422AA3A40008FB833 /* ImageTableViewController.swift in Sources */,
+				CE612C3522B10159003CD38E /* TestCell.swift in Sources */,
 				D9C22DF722A265D6008FB833 /* APIManager.swift in Sources */,
 				D9ABD02522ABDC75009C9A80 /* RequestQueryStruct.swift in Sources */,
 				D9E9E35622AC1FED003AD328 /* QueryStruct.swift in Sources */,
