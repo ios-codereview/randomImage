@@ -8,27 +8,43 @@
 
 import UIKit
 
-class ImageCollectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ImageCollectionViewController: UIViewController {
    
-    @IBOutlet weak var tableView: UITableView!
-    
-    private let test = ["1","2","3","4","5"]
+    @IBOutlet weak var collectionView: UICollectionView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        // Do any additional setup after loading the view.
+        
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return test.count
+    private func setCollectionView() {
+        collectionView.register(ImageCollectionViewCell.self)
+    }
+
+    
+    
+}
+
+extension ImageCollectionViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "TestCell", for: indexPath) as? TestCell else { fatalError("nop") }
-        cell.label.text = test[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "test", for: indexPath)
+        
         return cell
     }
     
+    
+}
 
+extension ImageCollectionViewController: UICollectionViewDelegate {
+    
+}
+
+extension ImageCollectionViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize.zero
+    }
 }

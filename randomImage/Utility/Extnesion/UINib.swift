@@ -9,8 +9,8 @@
 import UIKit
 
 extension UINib {
-    convenience init(_ xibClass: AnyClass) {
+    convenience init(_ nibClass: AnyClass) {
         let mainBundle = Bundle(identifier: "com.onemoon.studio.randomImage")
-        self.init(nibName: String(describing: xibClass), bundle: mainBundle)
+        self.init(nibName: String(describing: nibClass), bundle: mainBundle)
     }
 }
