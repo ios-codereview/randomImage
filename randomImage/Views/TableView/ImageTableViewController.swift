@@ -9,30 +9,30 @@
 import UIKit
 import RequestBuilder
 
-class ImageTableViewController: UIViewController {
+class ImageTableViewController: UIViewController, ImageSearch {
 
     // MARK: - IBOutlet
     @IBOutlet weak var tableView: UITableView!
     
     // MARK: - Property
     
+//    var searchedItemList: [ImageItem] = []
+    weak var rootPageViewController: MainPageViewController!
+    var isImageDataChanged: Bool = false
+    
     private let cellMargin: CGFloat = 8.0
     private let cellSeperatorHeight: CGFloat = 10.0
     private var numberOfImagePerPage: Int = 20
     private var pageNumber: Int = 1
-    private var searchedItemList: [ImageItem] = []
-    
     private lazy var searchAPI: APIResource = {
         var api = ImageSearchRequestAPI(urlString: "https://openapi.naver.com/v1/search/image")
         api.headers = [SecretKey.id.key: SecretKey.id.value, SecretKey.secret.key: SecretKey.secret.value]
         return api
     }()
-    
     private lazy var apiManager: APIManager = {
         let manager = APIManager(apiResource: self.searchAPI)
         return manager
     }()
-    
     private lazy var navigationSearchBarController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.delegate = self
@@ -48,6 +48,15 @@ class ImageTableViewController: UIViewController {
         setTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isImageDataChanged {
+            reloadImageData()
+            title = rootPageViewController.searchKeyword
+            isImageDataChanged.toggle()
+        }
+    }
+    
     // TODO: Test Logic -> Search Naver
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -55,6 +64,10 @@ class ImageTableViewController: UIViewController {
     }
     
     // MARK: - Method
+    
+    func reloadImageData() {
+        tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+    }
     
     /// Large Title 관련된 Navigation View Controller를 설정해준다.
     private func setNavigationBar() {
@@ -88,7 +101,7 @@ class ImageTableViewController: UIViewController {
     /// - Parameter keyword: 검색할 키워드
     private func sendRequest(_ keyword: String, page number: Int) {
         // indicator 추가
-        title = keyword
+        rootPageViewController.searchKeyword = keyword
         apiManager.imageItems(keyword: keyword, page: number) { [weak self] (items, error) in
             guard let self = self,
                 let items = items else {
@@ -99,11 +112,9 @@ class ImageTableViewController: UIViewController {
                     }
                     return
             }
-            self.searchedItemList.append(contentsOf: items)
+            self.rootPageViewController.searchedItemList.append(contentsOf: items)
             DispatchQueue.main.async {
-//                self.tableView.reloadData()
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
-//                self.debug()
             }
         }
     }
@@ -111,7 +122,7 @@ class ImageTableViewController: UIViewController {
     /// 각각의 셀의 높이를 계산하기 위한 로직
     private func cellHeight(_ indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            let item = searchedItemList[indexPath.row]
+            let item = rootPageViewController.searchedItemList[indexPath.row]
             let viewFrameSize = view.frame.size
             let attrString = NSAttributedString(
                 string: item.title,
@@ -152,19 +163,17 @@ class ImageTableViewController: UIViewController {
     }
     
     private func debug(index: IndexPath) {
-        print("\(index) => \(searchedItemList[index.row].title)")
+        print("\(index) => \(rootPageViewController.searchedItemList[index.row].title)")
     }
 }
 
 // MARK: - UITableViewDataSource
 
 extension ImageTableViewController: UITableViewDataSource {
-    
-    
-    
+   
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return searchedItemList.count
+            return rootPageViewController.searchedItemList.count
         } else if section == 1 {
             return 1
         }
@@ -178,7 +187,7 @@ extension ImageTableViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.selectionStyle = .none
-            let individualItem = searchedItemList[indexPath.row]
+            let individualItem = rootPageViewController.searchedItemList[indexPath.row]
             let viewFrameSize = view.frame.size
             cell.configure(individualItem.title)
             DispatchQueue.global().async { [weak self] in
@@ -213,7 +222,7 @@ extension ImageTableViewController: UITableViewDataSource {
     }
     
     private func debug() {
-        for (index, item) in searchedItemList.enumerated() {
+        for (index, item) in rootPageViewController.searchedItemList.enumerated() {
             print("\(index) =>  \(item.title)")
         }
     }
@@ -262,7 +271,7 @@ extension ImageTableViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchedText = searchBar.text {
             pageNumber = 1
-            searchedItemList.removeAll()
+            rootPageViewController.searchedItemList.removeAll()
             sendRequest(searchedText, page: pageNumber)
             // 중간에 검색된 경우 취소하는 로직이 있어야 할듯?
         }

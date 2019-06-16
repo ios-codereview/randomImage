@@ -15,10 +15,37 @@ class MainPageViewController: UIPageViewController {
     private let pageViewControllersType = [StoryBoardType.imageTableView, StoryBoardType.imageCollectionView]
 
     private lazy var customPageViewControllers = Array<UIViewController?>(repeating: nil, count: self.pageViewControllersType.count)
-//    private lazy var customPageViewControllers: [UIViewController?] = {
-////        return [StoryBoardType.imageTableView.initialViewController , StoryBoardType.imageCollectionView.initialViewController]
-//    }()
+
     private var nowPageIndex = 0
+    
+    var searchedItemList: [ImageItem] = [] {
+        didSet {
+            for (index, viewController) in customPageViewControllers.enumerated() {
+                if viewController != nil, index == nowPageIndex {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.extractImageSearchController(viewController!).reloadImageData()
+                    }
+                } else if viewController != nil {
+                    var notShowingViewController = extractImageSearchController(viewController!)
+                    notShowingViewController.isImageDataChanged = true
+                }
+            }
+        }
+    }
+    
+    var searchKeyword: String = "Search" {
+        didSet {
+            for (index, viewController) in customPageViewControllers.enumerated() {
+                if viewController != nil, index == nowPageIndex {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.extractImageSearchController(viewController!).title = self.searchKeyword
+                    }
+                }
+            }
+        }
+    }
     
     // MARK: - Life Cycle
     
@@ -33,13 +60,16 @@ class MainPageViewController: UIPageViewController {
     private func setPageViewController() {
         self.dataSource = self
         self.delegate = self
-//        guard let firstViewController = customPageViewControllers.first! else { fatalError("first View Controller Error") }
-//        customPageViewControllers[0] = firstViewController
-        guard let firstViewController: UIViewController = pageViewControllersType.first!.initialViewController else { fatalError("first View Controller Error") }
-        customPageViewControllers[0] = firstViewController
-        setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
+        
+        let firstController = pageViewControllersType.first!.initialViewController
+        var firstImageSearchController = extractImageSearchController(firstController)
+        firstImageSearchController.rootPageViewController = self
+        
+        customPageViewControllers[0] = firstController
+        setViewControllers([firstController], direction: .forward, animated: true, completion: nil)
     }
     
+    // 마지막 화면의 바운스를 막기 위한 delegate 설정
     private func scrollViewDelegate() {
         for view in self.view.subviews {
             if let scrollView = view as? UIScrollView {
@@ -48,6 +78,18 @@ class MainPageViewController: UIPageViewController {
         }
     }
     
+    /// navigationController 의 첫번째 viewController 인 ImageSearchController를 리턴한다.
+    ///
+    /// - Parameter viewController: ImageSearchController가 포함된 navigation Controller
+    /// - Returns: ImageSearchController
+    private func extractImageSearchController(_ viewController: UIViewController) -> ImageSearchController {
+        if let resourceNavigationController = viewController as? UINavigationController,
+            let imageSearchController = resourceNavigationController.viewControllers.first as? ImageSearchController {
+            return imageSearchController
+        } else {
+            fatalError("ImageSearchController must be subController of UINavigationController")
+        }
+    }
 }
 
 // MARK: - UIPageViewControllerDataSource
@@ -55,30 +97,30 @@ class MainPageViewController: UIPageViewController {
 extension MainPageViewController: UIPageViewControllerDataSource {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        let previousIndex = nowPageIndex - 1
         
-        guard let viewControllerIndex = customPageViewControllers.firstIndex(of: viewController) else {
-            return nil
-        }
-        
-        let previousIndex = viewControllerIndex - 1
         if previousIndex >= 0 && customPageViewControllers[previousIndex] == nil {
-            customPageViewControllers[previousIndex] = pageViewControllersType[previousIndex].initialViewController
+            let newViewController = pageViewControllersType[previousIndex].initialViewController
+            var imageSearchController = extractImageSearchController(newViewController)
+            imageSearchController.rootPageViewController = self
+            customPageViewControllers[previousIndex] = newViewController
         }
         
         if previousIndex < 0 {
             return nil
         }
+        
         return customPageViewControllers[previousIndex]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        let nextIndex = nowPageIndex + 1
         
-        guard let viewControllerIndex = customPageViewControllers.firstIndex(of: viewController) else {
-            return nil
-        }
-        let nextIndex = viewControllerIndex + 1
         if nextIndex < customPageViewControllers.count &&  customPageViewControllers[nextIndex] == nil {
-            customPageViewControllers[nextIndex] = pageViewControllersType[nextIndex].initialViewController
+            let newViewController = pageViewControllersType[nextIndex].initialViewController
+            var imageSearchController = extractImageSearchController(newViewController)
+            imageSearchController.rootPageViewController = self
+            customPageViewControllers[nextIndex] = newViewController
         }
         
         if nextIndex >= customPageViewControllers.count {
@@ -87,7 +129,6 @@ extension MainPageViewController: UIPageViewControllerDataSource {
         
         return customPageViewControllers[nextIndex]
     }
-    
 }
 
 // MARK: - UIPageViewControllerDelegate
@@ -98,6 +139,7 @@ extension MainPageViewController: UIPageViewControllerDelegate {
             let pageIndex = customPageViewControllers.firstIndex(of: nowPageViewController) else {
                 fatalError("nowPageViewController Index Error")
         }
+        
         nowPageIndex = pageIndex
     }
 }

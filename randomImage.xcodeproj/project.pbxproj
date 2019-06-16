@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE22D84C22B649280018033B /* ImageSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE22D84B22B649280018033B /* ImageSearch.swift */; };
 		CE612C3022B0D113003CD38E /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE612C2E22B0D113003CD38E /* LoadingCell.swift */; };
 		CE612C3122B0D113003CD38E /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE612C2F22B0D113003CD38E /* LoadingCell.xib */; };
 		CE612C3322B0D26B003CD38E /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE612C3222B0D26B003CD38E /* UITableView.swift */; };
@@ -79,6 +80,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CE22D84B22B649280018033B /* ImageSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSearch.swift; sourceTree = "<group>"; };
 		CE612C2E22B0D113003CD38E /* LoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
 		CE612C2F22B0D113003CD38E /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
 		CE612C3222B0D26B003CD38E /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			children = (
 				D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */,
 				D9E9E35522AC1FED003AD328 /* QueryStruct.swift */,
+				CE22D84B22B649280018033B /* ImageSearch.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				D9E9E3FA22B4C72D003AD328 /* NavigationSearchBar.swift in Sources */,
 				D9C22EFB22A57CC2008FB833 /* StoryBoardType.swift in Sources */,
 				D9C22EF422A56B65008FB833 /* MainPageViewController.swift in Sources */,
+				CE22D84C22B649280018033B /* ImageSearch.swift in Sources */,
 				D9ABD01B22AA7EBD009C9A80 /* Reusable.swift in Sources */,
 				D9E9E3F422B2BECB003AD328 /* ImageCollectionViewCell.swift in Sources */,
 				CE612C3322B0D26B003CD38E /* UITableView.swift in Sources */,

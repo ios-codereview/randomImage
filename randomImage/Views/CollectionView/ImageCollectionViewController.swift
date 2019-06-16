@@ -8,8 +8,8 @@
 
 import UIKit
 
-class ImageCollectionViewController: UIViewController {
-   
+class ImageCollectionViewController: UIViewController, ImageSearch {
+    
     // MARK: - IBOutlet
     
     @IBOutlet weak var collectionView: UICollectionView!
@@ -22,6 +22,9 @@ class ImageCollectionViewController: UIViewController {
     
     // MARK: - Property
     
+    weak var rootPageViewController: MainPageViewController!
+    var isImageDataChanged: Bool = false
+    
     private let insetsForSections = UIEdgeInsets(top: 5.0,
                                                  left: 5.0,
                                                  bottom: 5.0,
@@ -31,8 +34,6 @@ class ImageCollectionViewController: UIViewController {
     private let itemsPerRow: CGFloat = 2.0
     private let largeTitleOffsetY: CGFloat = 6.0
     private var titleIsLarged = false
-    
-    
     private let testData = Array<String>.init(repeating: "collectionViewCell", count: 50)
     
     private lazy var navigationSearchBar: NavigationSearchBar = {
@@ -68,7 +69,20 @@ class ImageCollectionViewController: UIViewController {
         setCollectionView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isImageDataChanged {
+            reloadImageData()
+            title = rootPageViewController.searchKeyword
+            isImageDataChanged.toggle()
+        }
+    }
+    
     // MARK: - Method
+    
+    func reloadImageData() {
+        collectionView.reloadData()
+    }
     
     private func setCollectionView() {
         collectionView.register(ImageCollectionViewCell.self)
