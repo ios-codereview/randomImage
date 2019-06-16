@@ -36,6 +36,8 @@
 		D9E9E3F422B2BECB003AD328 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E9E3F222B2BECB003AD328 /* ImageCollectionViewCell.swift */; };
 		D9E9E3F522B2BECB003AD328 /* ImageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D9E9E3F322B2BECB003AD328 /* ImageCollectionViewCell.xib */; };
 		D9E9E3F722B2C1D0003AD328 /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E9E3F622B2C1D0003AD328 /* UICollectionView.swift */; };
+		D9E9E3FA22B4C72D003AD328 /* NavigationSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9E9E3F922B4C72D003AD328 /* NavigationSearchBar.swift */; };
+		D9E9E3FD22B4C743003AD328 /* NavigationSearchBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = D9E9E3FC22B4C743003AD328 /* NavigationSearchBar.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +109,8 @@
 		D9E9E3F222B2BECB003AD328 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		D9E9E3F322B2BECB003AD328 /* ImageCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageCollectionViewCell.xib; sourceTree = "<group>"; };
 		D9E9E3F622B2C1D0003AD328 /* UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
+		D9E9E3F922B4C72D003AD328 /* NavigationSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSearchBar.swift; sourceTree = "<group>"; };
+		D9E9E3FC22B4C743003AD328 /* NavigationSearchBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavigationSearchBar.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +176,8 @@
 			children = (
 				D9C22EF322A56B65008FB833 /* MainPageViewController.swift */,
 				D9E1A3AA229D80B70076613C /* Main.storyboard */,
+				D9E9E3F922B4C72D003AD328 /* NavigationSearchBar.swift */,
+				D9E9E3FC22B4C743003AD328 /* NavigationSearchBar.xib */,
 				D9C22EFF22AA371D008FB833 /* TableView */,
 				D9C22F0022AA3721008FB833 /* CollectionView */,
 			);
@@ -344,6 +350,7 @@
 				D9ABD01722AA78C7009C9A80 /* ImageTableViewCell.xib in Resources */,
 				D9E1A3AC229D80B70076613C /* Main.storyboard in Resources */,
 				D9E9E3F522B2BECB003AD328 /* ImageCollectionViewCell.xib in Resources */,
+				D9E9E3FD22B4C743003AD328 /* NavigationSearchBar.xib in Resources */,
 				D9C22F0822AA3A8A008FB833 /* ImageCollectionView.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,6 +365,7 @@
 				D9ABD01622AA78C7009C9A80 /* ImageTableViewCell.swift in Sources */,
 				D9E9E35822AC2247003AD328 /* UINib.swift in Sources */,
 				D9C22F0622AA3A4F008FB833 /* ImageCollectionViewController.swift in Sources */,
+				D9E9E3FA22B4C72D003AD328 /* NavigationSearchBar.swift in Sources */,
 				D9C22EFB22A57CC2008FB833 /* StoryBoardType.swift in Sources */,
 				D9C22EF422A56B65008FB833 /* MainPageViewController.swift in Sources */,
 				D9ABD01B22AA7EBD009C9A80 /* Reusable.swift in Sources */,

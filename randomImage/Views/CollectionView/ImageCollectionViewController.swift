@@ -29,14 +29,39 @@ class ImageCollectionViewController: UIViewController {
     private let minimumSpacingForRow: CGFloat = 5.0
     private let widthBetweenItems: CGFloat = 5.0
     private let itemsPerRow: CGFloat = 2.0
+    private var titleIsLarged = false
+    
     private let testData = Array<String>.init(repeating: "collectionViewCell", count: 50)
+    
+    private lazy var navigationSearchBar: NavigationSearchBar = {
+        guard let navigationBarHeight: CGFloat = navigationController?.navigationBar.frame.height,
+        let navigationTintColor: UIColor = navigationController?.navigationBar.barTintColor else {
+            fatalError("navigatin Controller and TintColor are inevitable")
+        }
+        guard let searchBar: NavigationSearchBar = UINib(NavigationSearchBar.self).instantiate(withOwner: self, options: nil).first as? NavigationSearchBar else {
+            fatalError("fail to instantiate View with Nib")
+        }
+        searchBar.viewBackgroundColor = navigationTintColor
+        searchBar.cancelAction = searchCancelAction
+        searchBar.clipsToBounds = true
+        searchBar.frame = CGRect(
+            x: 0,
+            y: 0,
+            width: view.frame.width,
+            height: navigationBarHeight - 2.0 ) // navigation border
+        return searchBar
+    }()
     
     // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         title = "CollectionView"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.barTintColor = .white
+        navigationController?.navigationBar.addSubview(navigationSearchBar)
+        navigationSearchBar.isHidden = true
         setCollectionView()
     }
     
@@ -49,10 +74,27 @@ class ImageCollectionViewController: UIViewController {
     }
     
     @objc private func didTapSearchButton() {
-        print("hello")
-        // 이렇게 하면 사라지기는 한다.
+        navigationSearchBar.isHidden = false
         navigationController?.navigationBar.prefersLargeTitles = false
+        if collectionView.contentOffset.y < 6.0 {
+            titleIsLarged = true
+        }
+    }
+    
+    func searchCancelAction() {
+        print("VC cancel")
+        navigationController?.navigationBar.prefersLargeTitles = true
         
+        if titleIsLarged {
+            // 8 : largetitle height - navigatio controller height
+            collectionView.setContentOffset(CGPoint(x: 0, y: -8), animated: true)
+            titleIsLarged = false
+        }
+        
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(scrollView.contentOffset)
     }
 }
 
