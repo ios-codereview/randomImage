@@ -29,7 +29,9 @@ class ImageCollectionViewController: UIViewController {
     private let minimumSpacingForRow: CGFloat = 5.0
     private let widthBetweenItems: CGFloat = 5.0
     private let itemsPerRow: CGFloat = 2.0
+    private let largeTitleOffsetY: CGFloat = 6.0
     private var titleIsLarged = false
+    
     
     private let testData = Array<String>.init(repeating: "collectionViewCell", count: 50)
     
@@ -41,8 +43,9 @@ class ImageCollectionViewController: UIViewController {
         guard let searchBar: NavigationSearchBar = UINib(NavigationSearchBar.self).instantiate(withOwner: self, options: nil).first as? NavigationSearchBar else {
             fatalError("fail to instantiate View with Nib")
         }
+        searchBar.delegate = self
         searchBar.viewBackgroundColor = navigationTintColor
-        searchBar.cancelAction = searchCancelAction
+        searchBar.customCancelAction = searchCancelAction
         searchBar.clipsToBounds = true
         searchBar.frame = CGRect(
             x: 0,
@@ -74,17 +77,12 @@ class ImageCollectionViewController: UIViewController {
     }
     
     @objc private func didTapSearchButton() {
-        navigationSearchBar.isHidden = false
+        navigationSearchBar.nowSearching = true
         navigationController?.navigationBar.prefersLargeTitles = false
-        if collectionView.contentOffset.y < 6.0 {
-            titleIsLarged = true
-        }
     }
     
     func searchCancelAction() {
-        print("VC cancel")
         navigationController?.navigationBar.prefersLargeTitles = true
-        
         if titleIsLarged {
             // 8 : largetitle height - navigatio controller height
             collectionView.setContentOffset(CGPoint(x: 0, y: -8), animated: true)
@@ -94,7 +92,11 @@ class ImageCollectionViewController: UIViewController {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset)
+        if scrollView.contentOffset.y < largeTitleOffsetY {
+            titleIsLarged = true
+        } else {
+            titleIsLarged = false
+        }
     }
 }
 
@@ -144,4 +146,15 @@ extension ImageCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension ImageCollectionViewController: UICollectionViewDelegate {
     
+}
+
+// MARK: - UISearchBarDelegate
+
+extension ImageCollectionViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let keyword = searchBar.text {
+            title = keyword
+        }
+        navigationSearchBar.cancelAction()
+    }
 }

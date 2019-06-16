@@ -15,15 +15,17 @@ class NavigationSearchBar: UIView {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var cancelButton: UIButton! {
         didSet {
-            cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
+            cancelButton.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
         }
     }
     
     // MARK: - Property
     
-    weak var delegate: UISearchControllerDelegate?
-    
-    var cancelAction: (() -> Void)?
+    weak var delegate: UISearchBarDelegate? {
+        didSet {
+            searchBar.delegate = delegate
+        }
+    }
     
     var viewBackgroundColor: UIColor = .lightGray {
         didSet {
@@ -32,7 +34,7 @@ class NavigationSearchBar: UIView {
         }
     }
     
-    private var nowSearching: Bool = false {
+    var nowSearching: Bool = false {
         didSet {
             if nowSearching {
                 self.isHidden = false
@@ -43,15 +45,16 @@ class NavigationSearchBar: UIView {
         }
     }
     
+    var customCancelAction: (() -> Void)?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         searchBar.placeholder = "Search what Images U want"
     }
     
-    @objc private func didTapCancel() {
+    @objc func cancelAction() {
         searchBar.resignFirstResponder()
-        print("cancel! ")
-        cancelAction?()
+        customCancelAction?()
         nowSearching = false
     }
 
