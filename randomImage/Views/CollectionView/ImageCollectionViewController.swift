@@ -41,9 +41,9 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
         let navigationTintColor: UIColor = navigationController?.navigationBar.barTintColor else {
             fatalError("navigatin Controller and TintColor are inevitable")
         }
-        guard let searchBar: NavigationSearchBar = UINib(NavigationSearchBar.self).instantiate(withOwner: self, options: nil).first as? NavigationSearchBar else {
-            fatalError("fail to instantiate View with Nib")
-        }
+        guard let searchBar: NavigationSearchBar =
+            UINib(NavigationSearchBar.self).instantiate(withOwner: self, options: nil).first as? NavigationSearchBar
+            else { fatalError("fail to instantiate View with Nib") }
         searchBar.delegate = self
         searchBar.viewBackgroundColor = navigationTintColor
         searchBar.customCancelAction = searchCancelAction
@@ -60,12 +60,7 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        title = "CollectionView"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.barTintColor = .white
-        navigationController?.navigationBar.addSubview(navigationSearchBar)
-        navigationSearchBar.isHidden = true
+        setNavigationBar()
         setCollectionView()
     }
     
@@ -84,25 +79,13 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
         collectionView.reloadData()
     }
     
-    private func setCollectionView() {
-        collectionView.register(ImageCollectionViewCell.self)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-    }
-    
-    @objc private func didTapSearchButton() {
-        navigationSearchBar.nowSearching = true
-        navigationController?.navigationBar.prefersLargeTitles = false
-    }
-    
     func searchCancelAction() {
         navigationController?.navigationBar.prefersLargeTitles = true
         if titleIsLarged {
             // 8 : largetitle height - navigatio controller height
-            collectionView.setContentOffset(CGPoint(x: 0, y: -8), animated: true)
+            collectionView.setContentOffset(CGPoint(x: 0, y: -8), animated: false)
             titleIsLarged = false
         }
-        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -112,13 +95,36 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
             titleIsLarged = false
         }
     }
+    
+    // MARK: - Private Method
+    
+    private func setNavigationBar() {
+        title = "CollectionView"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.barTintColor = .white
+        navigationController?.navigationBar.addSubview(navigationSearchBar)
+        navigationSearchBar.isHidden = true
+    }
+    
+    private func setCollectionView() {
+        collectionView.register(ImageCollectionViewCell.self)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+    }
+    
+    // MARK: - objc
+    
+    @objc private func didTapSearchButton() {
+        navigationSearchBar.nowSearching = true
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
 }
 
 // MARK: - UICollectionViewDataSource
 
 extension ImageCollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return testData.count
+        return rootPageViewController.searchedItemList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

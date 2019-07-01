@@ -32,8 +32,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="R7P-oX-MKG"/>
                     </view>
-                    <navigationItem key="navigationItem" id="VAu-M2-aaU"/>
+                    <navigationItem key="navigationItem" id="VAu-M2-aaU">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="sTy-xt-Kgj"/>
+                    </navigationItem>
                     <connections>
+                        <outlet property="searchButton" destination="sTy-xt-Kgj" id="dm3-eL-BJl"/>
                         <outlet property="tableView" destination="4k2-Y9-Y1d" id="ye4-BQ-GE6"/>
                     </connections>
                 </viewController>

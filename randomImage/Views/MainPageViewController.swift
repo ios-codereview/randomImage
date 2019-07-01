@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RequestBuilder
 
 class MainPageViewController: UIPageViewController {
 
@@ -20,21 +21,14 @@ class MainPageViewController: UIPageViewController {
     
     var searchedItemList: [ImageItem] = [] {
         didSet {
-            for (index, viewController) in customPageViewControllers.enumerated() {
-                if viewController != nil, index == nowPageIndex {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.extractImageSearchController(viewController!).reloadImageData()
-                    }
-                } else if viewController != nil {
-                    var notShowingViewController = extractImageSearchController(viewController!)
-                    notShowingViewController.isImageDataChanged = true
-                }
+            for (index, viewController) in customPageViewControllers.enumerated() where viewController != nil && index != nowPageIndex {
+                var notShowingViewController = extractImageSearchController(viewController!)
+                notShowingViewController.isImageDataChanged = true
             }
         }
     }
     
-    var searchKeyword: String = "Search" {
+    var searchKeyword: String = "" {
         didSet {
             for (index, viewController) in customPageViewControllers.enumerated() {
                 if viewController != nil, index == nowPageIndex {
@@ -46,6 +40,8 @@ class MainPageViewController: UIPageViewController {
             }
         }
     }
+    
+    var searchedPageNumber: Int = 1
     
     // MARK: - Life Cycle
     
@@ -88,6 +84,29 @@ class MainPageViewController: UIPageViewController {
             return imageSearchController
         } else {
             fatalError("ImageSearchController must be subController of UINavigationController")
+        }
+    }
+    
+    /// keyword 값으로 검색하는 로직
+    ///
+    /// - Parameter keyword: 검색할 키워드
+    func search(_ keyword: String, page number: Int, completion: @escaping (_ list: [ImageItem]?) -> Void) {
+        // indicator 추가
+        searchKeyword = keyword
+        NaverAPI.search.manager.imageItems(keyword: keyword, page: number) { [weak self] (items, error) in
+            guard let self = self else { return }
+            
+            if let error = error {
+                print(error.localizedDescription)
+                completion(nil)
+            }
+            
+            if let items = items {
+//                self.searchedItemList.append(contentsOf: items)
+                completion(items)
+            }
+            
+            completion(nil)
         }
     }
 }

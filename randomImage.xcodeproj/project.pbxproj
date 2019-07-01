@@ -11,6 +11,7 @@
 		CE612C3022B0D113003CD38E /* LoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE612C2E22B0D113003CD38E /* LoadingCell.swift */; };
 		CE612C3122B0D113003CD38E /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE612C2F22B0D113003CD38E /* LoadingCell.xib */; };
 		CE612C3322B0D26B003CD38E /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE612C3222B0D26B003CD38E /* UITableView.swift */; };
+		D93CBB1E22CA0E5000AF5F2C /* SearchAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D93CBB1D22CA0E5000AF5F2C /* SearchAPI.swift */; };
 		D9ABD01622AA78C7009C9A80 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */; };
 		D9ABD01722AA78C7009C9A80 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */; };
 		D9ABD01B22AA7EBD009C9A80 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */; };
@@ -84,6 +85,7 @@
 		CE612C2E22B0D113003CD38E /* LoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCell.swift; sourceTree = "<group>"; };
 		CE612C2F22B0D113003CD38E /* LoadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
 		CE612C3222B0D26B003CD38E /* UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableView.swift; sourceTree = "<group>"; };
+		D93CBB1D22CA0E5000AF5F2C /* SearchAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAPI.swift; sourceTree = "<group>"; };
 		D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
 		D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageTableViewCell.xib; sourceTree = "<group>"; };
 		D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				D9C22EFA22A57CC2008FB833 /* StoryBoardType.swift */,
+				D93CBB1D22CA0E5000AF5F2C /* SearchAPI.swift */,
 			);
 			path = Enum;
 			sourceTree = "<group>";
@@ -365,6 +368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D93CBB1E22CA0E5000AF5F2C /* SearchAPI.swift in Sources */,
 				D9ABD01622AA78C7009C9A80 /* ImageTableViewCell.swift in Sources */,
 				D9E9E35822AC2247003AD328 /* UINib.swift in Sources */,
 				D9C22F0622AA3A4F008FB833 /* ImageCollectionViewController.swift in Sources */,
