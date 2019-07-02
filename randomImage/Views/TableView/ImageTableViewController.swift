@@ -28,6 +28,7 @@ class ImageTableViewController: UIViewController, ImageSearch {
     var isNowSearching: Bool = false
     private let largeTitleOffsetY: CGFloat = 6.0
     private var titleIsLarged = false
+    private var newSearch = false
     
     private let cellMargin: CGFloat = 8.0
     private let cellSeperatorHeight: CGFloat = 10.0
@@ -81,6 +82,7 @@ class ImageTableViewController: UIViewController, ImageSearch {
         }
     }
     
+    // 검색하다가 cancel을 누른 경우 사용되는 함수
     func searchCancelAction() {
         navigationController?.navigationBar.prefersLargeTitles = true
         if titleIsLarged {
@@ -90,6 +92,7 @@ class ImageTableViewController: UIViewController, ImageSearch {
         }
     }
     
+    // 현재 LargeTitle 로 되어있는지 판단한다. navigation Search bar를 위해서 titleIsLarge 를 이용
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < largeTitleOffsetY {
             titleIsLarged = true
@@ -102,14 +105,10 @@ class ImageTableViewController: UIViewController, ImageSearch {
    
     /// Large Title 관련된 Navigation View Controller를 설정해준다.
     private func setNavigationBar() {
-        // 라지 타이틀을 사용하면 push 되었을 때 그 영역이 같이 넘어간다?!
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = .white
         navigationController?.navigationBar.addSubview(navigationSearchBar)
         navigationSearchBar.isHidden = true
-        
-        // 왜 해주는가? 이 값을 적용함으로서 덮어지는 searchBarContext 를 현재의 viewController에서 관리하게 한다. 만약에 이 값이 false라면 hiararchy를 계속 따라 가면서 결국 uiwindow가 해당 presentation을 관리하게 된다.
-//        self.definesPresentationContext = true
     }
     
     /// 테이블뷰 설정
@@ -171,20 +170,22 @@ class ImageTableViewController: UIViewController, ImageSearch {
     private func search(_ keyword: String, page number: Int) {
         rootPageViewController.search(keyword, page: number) { items in
             guard let items = items else { return }
+            let base = (self.pageNumber-1) * 20
+            let newIndexPaths = items.enumerated().map { IndexPath(row: base + $0.offset, section: 0) }
+            
             DispatchQueue.main.async {
                 self.tableView.beginUpdates()
+                
+                if self.newSearch {
+                    let deleted = self.rootPageViewController.searchedItemList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
+                    self.tableView.deleteRows(at: deleted, with: .none)
+                    self.rootPageViewController.searchedItemList.removeAll()
+                    self.navigationController?.navigationBar.prefersLargeTitles = true
+                    self.newSearch = false
+                }
+                
                 self.rootPageViewController.searchedItemList.append(contentsOf: items)
-                let indexpaths: [IndexPath] = {
-                    // TODO: 첫 데이터가 20개라는 보장은 없음 이에 대해서 처리해야한다.
-                    let base = (self.pageNumber-1)*20
-                    print(base)
-                    var newIndexPaths: [IndexPath] = []
-                    for index in base..<base+items.count {
-                        newIndexPaths.append(IndexPath(row: index, section: 0))
-                    }
-                    return newIndexPaths
-                }()
-                self.tableView.insertRows(at: indexpaths, with: .automatic)
+                self.tableView.insertRows(at: newIndexPaths, with: .none)
                 self.isNowSearching = false
                 self.tableView.endUpdates()
             }
@@ -225,26 +226,25 @@ extension ImageTableViewController: UITableViewDataSource {
     /// 다운샘플링 된 이미지가 cell 에 뿌려진다.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
+            let individualItem = rootPageViewController.searchedItemList[indexPath.row]
+            let viewFrameSize = view.frame.size
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.reuseIdentifier) as? ImageTableViewCell else {
                 return UITableViewCell()
             }
             cell.selectionStyle = .none
-            let individualItem = rootPageViewController.searchedItemList[indexPath.row]
-            let viewFrameSize = view.frame.size
             cell.configure(individualItem.title)
             // 아래는 다운샘플링 이미지 작업 처리
             DispatchQueue.global().async { [weak self] in
                 guard let self = self else { return }
+                
                 CacheImageManager.downSampledImage(
                     urlString: individualItem.link,
                     viewSize: self.imageViewSize(individualItem, viewFrameSize),
-                    scale: UIScreen.main.scale,
                     completion: { (image, url) in
                         guard let image = image else { return }
                         DispatchQueue.main.async {
-                            // 원하는 대로 작동하지 않는다 왜? 캡쳐링 때문에!
-                            // 내가 여기서 쓴 individualitem은 캡쳐된 것이다. 따라서 제대로 작동하지 않았다.
-                            // -> 이를 indexpath를 통해서 해결하면 되지 않을까? -> 해결 !
+                            // TODO: 재사용 되면서 이전 요청된 이미지들이 보여진다.
+                            // 내가 여기서 쓴 individualitem은 캡쳐가 되어서 그런가? -> indexpath를 통해서 해결하면 되지 않을까?
                             if url == self.rootPageViewController.searchedItemList[indexPath.row].link {
                                 cell.configure(image)
                             }
@@ -305,24 +305,17 @@ extension ImageTableViewController: UITableViewDataSourcePrefetching {
     }
 }
 
-// MARK: - UISearchControllerDelegate
-
-extension ImageTableViewController: UISearchControllerDelegate {
-    
-}
-
 // MARK: - UISearchBarDelegate
 
 extension ImageTableViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchedText = searchBar.text {
             pageNumber = 1
-            rootPageViewController.searchedItemList.removeAll()
+            newSearch = true
+            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             search(searchedText, page: pageNumber)
-            // 중간에 검색된 경우 취소하는 로직이 있어야 할듯?
         }
         searchBar.text = nil
         navigationSearchBar.cancelAction()
-//        navigationSearchBarController.isActive = false
     }
 }

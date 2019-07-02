@@ -36,11 +36,10 @@ class CacheImageManager {
     }
     
     /// 다운샘플링한 이미지
-    static func downSampledImage(urlString: String, viewSize: CGSize, scale: CGFloat, completion: @escaping (_ image: UIImage?,_ url: String)  -> Void ) {
-        
+    static func downSampledImage(urlString: String, viewSize: CGSize, completion: @escaping (_ image: UIImage?,_ url: String)  -> Void ) {
         // if image already cached
         if let cachedData = imageDataCache.object(forKey: urlString as NSString) {
-            completion(downsample(image: cachedData, to: viewSize, scale: scale), urlString)
+            completion(downsample(image: cachedData, to: viewSize, scale: UIScreen.main.scale), urlString)
             return
         }
         
@@ -51,7 +50,7 @@ class CacheImageManager {
             }
             let imageNSData = NSData(data: data)
             imageDataCache.setObject(imageNSData, forKey: urlString as NSString)
-            let downsampledImage = downsample(image: imageNSData, to: viewSize, scale: scale)
+            let downsampledImage = downsample(image: imageNSData, to: viewSize, scale: UIScreen.main.scale)
             completion(downsampledImage, urlString)
         }
     }

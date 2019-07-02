@@ -99,7 +99,6 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
     // MARK: - Private Method
     
     private func setNavigationBar() {
-        title = "CollectionView"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.barTintColor = .white
         navigationController?.navigationBar.addSubview(navigationSearchBar)
