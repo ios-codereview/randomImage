@@ -10,12 +10,25 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell, Reusable {
 
-    @IBOutlet weak var iamgeTitle: UILabel!
+    @IBOutlet weak var imageTitle: UILabel!
     @IBOutlet weak var centerImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        centerImageView.image = UIImage(named: "defaultImage")
+    }
+    
+    func configure(_ title: String) {
+        imageTitle.text = title
+    }
+    
+    func confifure(_ image: UIImage) {
+        centerImageView.image = image
     }
 
 }

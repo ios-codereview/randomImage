@@ -22,13 +22,13 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Hy-AH-ey0" userLabel="Content View">
                         <rect key="frame" x="0.0" y="0.0" width="188" height="172"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bam-nz-Bdy">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bam-nz-Bdy">
                                 <rect key="frame" x="0.0" y="8" width="188" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q32-aF-4Cx">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q32-aF-4Cx">
                                 <rect key="frame" x="0.0" y="33" width="188" height="139"/>
                             </imageView>
                         </subviews>
@@ -55,7 +55,7 @@
             <size key="customSize" width="188" height="172"/>
             <connections>
                 <outlet property="centerImageView" destination="q32-aF-4Cx" id="O4Y-wY-uye"/>
-                <outlet property="iamgeTitle" destination="bam-nz-Bdy" id="QuT-Oi-A2H"/>
+                <outlet property="imageTitle" destination="bam-nz-Bdy" id="QuT-Oi-A2H"/>
             </connections>
             <point key="canvasLocation" x="237.68115942028987" y="154.6875"/>
         </collectionViewCell>

@@ -68,7 +68,7 @@ class ImageTableViewController: UIViewController, ImageSearch {
         super.viewWillAppear(animated)
         if isImageDataChanged {
             reloadImageData()
-            title = rootPageViewController.searchKeyword
+            navigationItem.title = rootPageViewController.searchKeyword
             isImageDataChanged.toggle()
         }
     }
@@ -217,10 +217,9 @@ extension ImageTableViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return rootPageViewController.searchedItemList.count
-        } else if section == 1 {
+        } else {
             return 1
         }
-        return 0
     }
     
     /// 다운샘플링 된 이미지가 cell 에 뿌려진다.
