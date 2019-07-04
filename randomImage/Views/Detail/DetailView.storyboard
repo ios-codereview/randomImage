@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="EAj-U8-teg">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Detail View Controller-->
+        <scene sceneID="cJI-lH-8SC">
+            <objects>
+                <viewController id="EAj-U8-teg" customClass="DetailViewController" customModule="randomImage" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8Qp-tX-Alq">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJx-nX-GQE">
+                                <rect key="frame" x="386" y="52" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="f7g-gQ-Pat"/>
+                                    <constraint firstAttribute="width" constant="20" id="n5F-f1-SjY"/>
+                                </constraints>
+                                <state key="normal" image="close"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Kr1-kR-YX7" firstAttribute="trailing" secondItem="KJx-nX-GQE" secondAttribute="trailing" constant="8" id="bDB-fO-2UQ"/>
+                            <constraint firstItem="KJx-nX-GQE" firstAttribute="top" secondItem="Kr1-kR-YX7" secondAttribute="top" constant="8" id="gcN-fl-kPm"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Kr1-kR-YX7"/>
+                    </view>
+                    <connections>
+                        <outlet property="closeButton" destination="KJx-nX-GQE" id="Yji-ZI-yn6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aDb-Ab-JS6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="211.59420289855075" y="-172.09821428571428"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="close" width="64" height="64"/>
+    </resources>
+</document>

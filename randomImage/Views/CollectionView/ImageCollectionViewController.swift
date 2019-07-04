@@ -131,8 +131,8 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
                 
                 if self.newSearch {
                     let deleted = self.rootPageViewController.searchedItemList.enumerated().map { IndexPath(row: $0.offset, section: 0) }
-                    self.collectionView.deleteItems(at: deleted)
                     self.rootPageViewController.searchedItemList.removeAll()
+                    self.collectionView.deleteItems(at: deleted)
                     self.navigationController?.navigationBar.prefersLargeTitles = true
                     self.newSearch = false
                 }

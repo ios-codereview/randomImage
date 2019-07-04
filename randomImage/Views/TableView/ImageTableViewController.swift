@@ -280,6 +280,19 @@ extension ImageTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeight(indexPath)
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let individualItem = rootPageViewController.searchedItemList[indexPath.row]
+        CacheImageManager.image(urlString: individualItem.link, completion: {
+            guard
+                let image = $0,
+                let detailViewController = StoryBoardType.imageDetailView.initialViewController as? DetailViewController
+                else { fatalError("detail view error") }
+            detailViewController.image = image
+            self.present(detailViewController, animated: true, completion: nil)
+        })
+        
+    }
 }
 
 // MARK: - UITableViewDataSourcePrefetching

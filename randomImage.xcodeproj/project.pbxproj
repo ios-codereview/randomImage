@@ -15,6 +15,8 @@
 		D999D23B22CB70BD000CD458 /* DownSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = D999D23A22CB70BD000CD458 /* DownSample.swift */; };
 		D999D23F22CC84DD000CD458 /* LoadingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D999D23D22CC84DD000CD458 /* LoadingCollectionViewCell.swift */; };
 		D999D24022CC84DD000CD458 /* LoadingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D999D23E22CC84DD000CD458 /* LoadingCollectionViewCell.xib */; };
+		D999D24522CDEDB8000CD458 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D999D24422CDEDB8000CD458 /* DetailViewController.swift */; };
+		D999D24722CDEDC5000CD458 /* DetailView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D999D24622CDEDC5000CD458 /* DetailView.storyboard */; };
 		D9ABD01622AA78C7009C9A80 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */; };
 		D9ABD01722AA78C7009C9A80 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */; };
 		D9ABD01B22AA7EBD009C9A80 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */; };
@@ -92,6 +94,8 @@
 		D999D23A22CB70BD000CD458 /* DownSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownSample.swift; sourceTree = "<group>"; };
 		D999D23D22CC84DD000CD458 /* LoadingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCollectionViewCell.swift; sourceTree = "<group>"; };
 		D999D23E22CC84DD000CD458 /* LoadingCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingCollectionViewCell.xib; sourceTree = "<group>"; };
+		D999D24422CDEDB8000CD458 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		D999D24622CDEDC5000CD458 /* DetailView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailView.storyboard; sourceTree = "<group>"; };
 		D9ABD01422AA78C7009C9A80 /* ImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
 		D9ABD01522AA78C7009C9A80 /* ImageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageTableViewCell.xib; sourceTree = "<group>"; };
 		D9ABD01A22AA7EBD009C9A80 /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
@@ -135,6 +139,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D999D24222CDED9C000CD458 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				D999D24422CDEDB8000CD458 /* DetailViewController.swift */,
+				D999D24622CDEDC5000CD458 /* DetailView.storyboard */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
 		D9ABD01922AA7EB0009C9A80 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +205,7 @@
 				D9E9E3FC22B4C743003AD328 /* NavigationSearchBar.xib */,
 				D9C22EFF22AA371D008FB833 /* TableView */,
 				D9C22F0022AA3721008FB833 /* CollectionView */,
+				D999D24222CDED9C000CD458 /* Detail */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -359,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE612C3122B0D113003CD38E /* LoadingCell.xib in Resources */,
+				D999D24722CDEDC5000CD458 /* DetailView.storyboard in Resources */,
 				D9C22F0A22AA3A93008FB833 /* ImageTableView.storyboard in Resources */,
 				D9E1A3B1229D80B80076613C /* LaunchScreen.storyboard in Resources */,
 				D9E1A3AE229D80B80076613C /* Assets.xcassets in Resources */,
@@ -380,6 +395,7 @@
 			files = (
 				D93CBB1E22CA0E5000AF5F2C /* SearchAPI.swift in Sources */,
 				D9ABD01622AA78C7009C9A80 /* ImageTableViewCell.swift in Sources */,
+				D999D24522CDEDB8000CD458 /* DetailViewController.swift in Sources */,
 				D9E9E35822AC2247003AD328 /* UINib.swift in Sources */,
 				D9C22F0622AA3A4F008FB833 /* ImageCollectionViewController.swift in Sources */,
 				D9E9E3FA22B4C72D003AD328 /* NavigationSearchBar.swift in Sources */,

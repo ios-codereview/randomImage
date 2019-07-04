@@ -13,6 +13,7 @@ enum StoryBoardType: String {
     case main = "Main"
     case imageTableView = "ImageTableView"
     case imageCollectionView = "ImageCollectionView"
+    case imageDetailView = "DetailView"
     
     var storyboard: UIStoryboard {
         let mainBundle = Bundle(identifier: "com.onemoon.studio.randomImage")
