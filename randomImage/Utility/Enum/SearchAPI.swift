@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RequestBuilder
+import APIResource
 
 enum NaverAPI {
     case search
@@ -15,7 +15,7 @@ enum NaverAPI {
     var resource: APIResource {
         switch self {
         case .search:
-            var api = ImageSearchRequestAPI(urlString: "https://openapi.naver.com/v1/search/image")
+            var api = APIResource("https://openapi.naver.com/v1/search/image")
             api.headers = [SecretKey.id.key: SecretKey.id.value, SecretKey.secret.key: SecretKey.secret.value]
             return api
         }

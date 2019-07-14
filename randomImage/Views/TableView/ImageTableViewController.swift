@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import RequestBuilder
 
 class ImageTableViewController: UIViewController, ImageSearch {
 

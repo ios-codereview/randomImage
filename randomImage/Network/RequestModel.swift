@@ -7,21 +7,21 @@
 //
 
 import Foundation
-import RequestBuilder
+import APIResource
 
-struct ImageSearchRequestAPI: APIResource {
-    var urlString: String?
-    var url: URL?
-    var host: String?
-    var paths: [String]?
-    var method: HTTPMethod = .get
-    var query: [String : Any]?
-    var headers: [String : Any]?
-    
-    init(urlString: String) {
-        self.urlString = urlString
-    }
-    
-}
+//struct ImageSearchRequestAPI: APIResource {
+//    var urlString: String?
+//    var url: URL?
+//    var host: String?
+//    var paths: [String]?
+//    var method: HTTPMethod = .get
+//    var query: [String : Any]?
+//    var headers: [String : Any]?
+//
+//    init(urlString: String) {
+//        self.urlString = urlString
+//    }
+//
+//}
 
 

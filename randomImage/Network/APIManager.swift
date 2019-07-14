@@ -7,20 +7,16 @@
 //
 
 import Foundation
-import RequestBuilder
+import APIResource
 
 class APIManager {
     
     // MARK: - Property
     
-    var apiResource: APIResource {
-        didSet {
-            urlRequest = RequestBuilder(apiResource: self.apiResource).build()
-        }
-    }
+    var apiResource: APIResource
     
     lazy var urlRequest: URLRequest = {
-        return RequestBuilder(apiResource: self.apiResource).build()
+        return self.apiResource.urlRequest()
     }()
     
     private let urlSession = URLSession(configuration: .default)
@@ -86,6 +82,6 @@ class APIManager {
             
             completion(data)
             
-        }.resume()
+            }.resume()
     }
- }
+}

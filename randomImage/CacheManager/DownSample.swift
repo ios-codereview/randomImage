@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO: task 취소 작업
 class DownSampleOperation: Operation {
     
     override func start() {
