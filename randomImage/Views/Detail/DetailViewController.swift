@@ -18,6 +18,14 @@ class DetailViewController: UIViewController {
         }
     }
     
+    @IBOutlet weak var scrollView: UIScrollView! {
+        didSet {
+            scrollView.delegate = self
+            scrollView.maximumZoomScale = 3.0
+            scrollView.minimumZoomScale = 1.0
+        }
+    }
+    
     // MARK: - Property
     
     override var prefersStatusBarHidden: Bool {
@@ -26,43 +34,44 @@ class DetailViewController: UIViewController {
     
     var image: UIImage?
     
-    lazy var scrollView: UIScrollView = {
-        let imageSize = image!.size
-        let viewFrame = view.frame
-        let scrollViewHight = imageSize.height / imageSize.width * viewFrame.width
-//        let newScrollView = UIScrollView(frame: CGRect(x: 0, y: (viewFrame.height - scrollViewHight) / 2.0 , width: viewFrame.width, height: scrollViewHight))
-        let newScrollView = UIScrollView(frame: CGRect(x: 0, y: 0 , width: viewFrame.width, height: viewFrame.height))
-        newScrollView.delegate = self
-        newScrollView.maximumZoomScale = 3.0
-        newScrollView.minimumZoomScale = 1.0
-//        newScrollView.isUserInteractionEnabled = true
-        return newScrollView
-    }()
-    
     lazy var imageView: UIImageView = {
         let resultImageView = UIImageView()
         resultImageView.image = image
-        resultImageView.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: scrollView.frame.height)
         resultImageView.contentMode = .scaleAspectFit
-//        resultImageView.translatesAutoresizingMaskIntoConstraints = false
-//        resultImageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 0.0)
-//        resultImageView.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 0.0)
-//        resultImageView.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: 0.0)
-//        resultImageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0.0)
+        resultImageView.frame = imageFrame
         resultImageView.isUserInteractionEnabled = true
         return resultImageView
     }()
     
+    lazy var imageFrame: CGRect = {
+        guard let imageSize = image?.size else { fatalError("image is nil") }
+        let imageRatio = imageSize.width / imageSize.height
+        if imageRatio >= 1 {
+            // 가로가 더 긴 경우
+            let imageHeight = view.frame.width / imageRatio
+            return CGRect(
+                x: 0,
+                y: ( view.frame.height - imageHeight ) / 2,
+                width: view.frame.width,
+                height: imageHeight)
+        } else {
+            // 세로가 더 긴 경우
+            let imageWidth = view.frame.height * imageRatio
+            return CGRect(
+                x: ( view.frame.width - imageWidth ) / 2,
+                y: 0,
+                width: imageWidth,
+                height: view.frame.height)
+        }
+    }()
+
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setScrollView()
-        
-        // Do any additional setup after loading the view.
+        setImageView()
     }
     
-    private func setScrollView() {
-        view.addSubview(scrollView)
+    private func setImageView() {
         scrollView.addSubview(imageView)
     }
     
@@ -78,12 +87,16 @@ extension DetailViewController: UIScrollViewDelegate {
         return imageView
     }
     
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        print(scale)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print("frame - > \(imageView.frame)")
-        print("bound - > \(imageView.bounds)")
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        let scale = scrollView.zoomScale
+        var newImageOrigin: CGPoint {
+            if scale == 1.0 || imageView.frame.height >= view.frame.height {
+                return imageView.frame.origin
+            }
+            let yOffset = (imageView.frame.height - imageFrame.size.height) / 2
+            return CGPoint(x: 0, y: imageFrame.origin.y - yOffset)
+        }
+        
+        imageView.frame.origin = newImageOrigin
     }
 }

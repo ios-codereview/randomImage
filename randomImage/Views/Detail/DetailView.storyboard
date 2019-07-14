@@ -18,6 +18,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f4m-FV-7Pg">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KJx-nX-GQE">
                                 <rect key="frame" x="386" y="52" width="20" height="20"/>
                                 <constraints>
@@ -29,13 +32,18 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Kr1-kR-YX7" firstAttribute="trailing" secondItem="f4m-FV-7Pg" secondAttribute="trailing" id="66h-8q-Mbk"/>
+                            <constraint firstAttribute="bottom" secondItem="f4m-FV-7Pg" secondAttribute="bottom" id="6jz-bN-vVV"/>
+                            <constraint firstItem="f4m-FV-7Pg" firstAttribute="top" secondItem="8Qp-tX-Alq" secondAttribute="top" id="JWs-PZ-NrR"/>
                             <constraint firstItem="Kr1-kR-YX7" firstAttribute="trailing" secondItem="KJx-nX-GQE" secondAttribute="trailing" constant="8" id="bDB-fO-2UQ"/>
+                            <constraint firstItem="f4m-FV-7Pg" firstAttribute="leading" secondItem="Kr1-kR-YX7" secondAttribute="leading" id="fR2-yV-WA0"/>
                             <constraint firstItem="KJx-nX-GQE" firstAttribute="top" secondItem="Kr1-kR-YX7" secondAttribute="top" constant="8" id="gcN-fl-kPm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Kr1-kR-YX7"/>
                     </view>
                     <connections>
                         <outlet property="closeButton" destination="KJx-nX-GQE" id="Yji-ZI-yn6"/>
+                        <outlet property="scrollView" destination="f4m-FV-7Pg" id="W0H-1J-R62"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aDb-Ab-JS6" userLabel="First Responder" sceneMemberID="firstResponder"/>

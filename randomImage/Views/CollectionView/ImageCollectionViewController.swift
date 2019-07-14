@@ -241,7 +241,17 @@ extension ImageCollectionViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - UICollectionViewDelegate
 
 extension ImageCollectionViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let individualItem = rootPageViewController.searchedItemList[indexPath.row]
+        CacheImageManager.image(urlString: individualItem.link, completion: {
+            guard
+                let image = $0,
+                let detailViewController = StoryBoardType.imageDetailView.initialViewController as? DetailViewController
+                else { fatalError("detail view error") }
+            detailViewController.image = image
+            self.present(detailViewController, animated: true, completion: nil)
+        })
+    }
 }
 
 // MARK: - UISearchBarDelegate
