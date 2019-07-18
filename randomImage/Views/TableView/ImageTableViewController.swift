@@ -22,17 +22,16 @@ class ImageTableViewController: UIViewController, ImageSearch {
     // MARK: - Property
     
     weak var rootPageViewController: MainPageViewController!
-    // 만약에 다른 컨트롤러에서 데이터를 변경시킨 경우
+    // Data
     var isImageDataChanged: Bool = false
     var isNowSearching: Bool = false
+    private var newSearch = false
+    private var pageNumber: Int = 1
+    // Layout
     private let largeTitleOffsetY: CGFloat = 6.0
     private var titleIsLarged = false
-    private var newSearch = false
-    
     private let cellMargin: CGFloat = 8.0
     private let cellSeperatorHeight: CGFloat = 10.0
-    private var numberOfImagePerPage: Int = 20
-    private var pageNumber: Int = 1
     
     private lazy var navigationSearchBar: NavigationSearchBar = {
         guard let navigationBarHeight: CGFloat = navigationController?.navigationBar.frame.height,
@@ -44,7 +43,6 @@ class ImageTableViewController: UIViewController, ImageSearch {
             else { fatalError("fail to instantiate View with Nib") }
         searchBar.delegate = self
         searchBar.viewBackgroundColor = navigationTintColor
-//        searchBar.customCancelAction = searchCancelAction
         searchBar.clipsToBounds = true
         searchBar.frame = CGRect(
             x: 0,
@@ -224,25 +222,18 @@ extension ImageTableViewController: UITableViewDataSource {
     /// 다운샘플링 된 이미지가 cell 에 뿌려진다.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let individualItem = rootPageViewController.searchedItemList[indexPath.row]
-            let viewFrameSize = view.frame.size
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.reuseIdentifier) as? ImageTableViewCell else {
                 return UITableViewCell()
             }
-            cell.selectionStyle = .none
+            let individualItem = rootPageViewController.searchedItemList[indexPath.row]
+            let viewFrameSize = view.frame.size
             cell.configure(individualItem.title)
             // 아래는 다운샘플링 이미지 작업 처리
             DispatchQueue.global().async { [weak self] in
                 guard let self = self else { return }
-                
-                CacheImageManager.downSampledImage(
-                    urlString: individualItem.link,
-                    viewSize: self.imageViewSize(individualItem, viewFrameSize),
-                    completion: { (image, url) in
+                CacheImageManager.downSampledImage(urlString: individualItem.link, viewSize: self.imageViewSize(individualItem, viewFrameSize), completion: { (image, url) in
                         guard let image = image else { return }
                         DispatchQueue.main.async {
-                            // TODO: 재사용 되면서 이전 요청된 이미지들이 보여진다.
-                            // 내가 여기서 쓴 individualitem은 캡쳐가 되어서 그런가? -> indexpath를 통해서 해결하면 되지 않을까?
                             if url == self.rootPageViewController.searchedItemList[indexPath.row].link {
                                 cell.configure(image)
                             }
@@ -257,16 +248,7 @@ extension ImageTableViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LoadingCell.reuseIdentifier) as? LoadingCell else {
                 return UITableViewCell()
             }
-            if !isNowSearching {
-                isNowSearching = true
-                cell.loadingIndicator.startAnimating()
-                if tableView.contentOffset.y != 0 {
-                    Timer.scheduledTimer(withTimeInterval: TimeInterval(1.0), repeats: false) { (_) in
-                        self.loadMoreImages()
-                        cell.loadingIndicator.stopAnimating()
-                    }
-                }
-            }
+            cell.loadingIndicator.startAnimating()
             return cell
         }
     }
@@ -298,21 +280,11 @@ extension ImageTableViewController: UITableViewDelegate {
 
 extension ImageTableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        // loading을 보여줄 것이라면 prefetch에서 할 필요가 없다.
-//        for indexPath in indexPaths {
-//            if tableView.contentOffset.y != 0 && indexPath.section != 0 {
-//                Timer.scheduledTimer(withTimeInterval: TimeInterval(1.0), repeats: false) { (_) in
-//                    self.loadMoreImages()
-//                }
-//            }
-//        }
-        // Infinite Scroll
-//        let totalImages = pageNumber * numberOfImagePerPage
-//        for indexPath in indexPaths {
-//            if tableView.contentOffset.y != 0 && indexPath.row == totalImages - 1 {
-//                loadMoreImages()
-//            }
-//        }
+        print(indexPaths)
+        for indexPath in indexPaths where indexPath.section == 1 && !isNowSearching {
+            isNowSearching.toggle()
+            loadMoreImages()
+        }
     }
 }
 

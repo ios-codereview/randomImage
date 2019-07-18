@@ -228,7 +228,7 @@
 		D9E1A3A5229D80B70076613C /* randomImage */ = {
 			isa = PBXGroup;
 			children = (
-				D9E1A3B9229D91DF0076613C /* Network */,
+				D9E1A3B9229D91DF0076613C /* Model */,
 				D9E9E35922AD119E003AD328 /* CacheManager */,
 				D9C22EFE22AA3718008FB833 /* Views */,
 				D9C22EF522A57884008FB833 /* Utility */,
@@ -240,7 +240,7 @@
 			path = randomImage;
 			sourceTree = "<group>";
 		};
-		D9E1A3B9229D91DF0076613C /* Network */ = {
+		D9E1A3B9229D91DF0076613C /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				D9C22DF622A265D6008FB833 /* APIManager.swift */,
@@ -249,7 +249,7 @@
 				D9ABD01E22AB7DCF009C9A80 /* ResponseModel.swift */,
 				D9ABD02222ABBBBA009C9A80 /* SecretKey.swift */,
 			);
-			path = Network;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		D9E9E35922AD119E003AD328 /* CacheManager */ = {
