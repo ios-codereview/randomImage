@@ -273,6 +273,7 @@
 				D9E1A3A0229D80B70076613C /* Frameworks */,
 				D9E1A3A1229D80B70076613C /* Resources */,
 				53945FE7AB4468828D026762 /* [CP] Embed Pods Frameworks */,
+				D91ACF8B22E08027000C97D0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -376,6 +377,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-randomImage/Pods-randomImage-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		D91ACF8B22E08027000C97D0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

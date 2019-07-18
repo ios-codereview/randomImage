@@ -7,5 +7,6 @@ target 'randomImage' do
 
   # Pods for randomImage
   pod 'APIResource'
+  pod 'SwiftLint'
 
 end

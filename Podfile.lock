@@ -1,16 +1,20 @@
 PODS:
   - APIResource (0.1.0)
+  - SwiftLint (0.33.1)
 
 DEPENDENCIES:
   - APIResource
+  - SwiftLint
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - APIResource
+    - SwiftLint
 
 SPEC CHECKSUMS:
   APIResource: d226189ebc5d6dea4faebe32162c3cb8ddcd6b99
+  SwiftLint: 9fc1143bbacec37f94994a7d0d2a85b2154b6294
 
-PODFILE CHECKSUM: 9e1239fcf58c0d3d23ee08ea61bcc3de9f4d3636
+PODFILE CHECKSUM: bebd545bfc865a49209d385d36e05070f617f183
 
 COCOAPODS: 1.7.3
