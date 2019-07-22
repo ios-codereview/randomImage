@@ -13,6 +13,8 @@ fileprivate let imageDataCache = NSCache<NSString, NSData>()
 
 class CacheImageManager {
     
+    static let downsampledImageQueue = DispatchQueue(label: "downsampledImage", qos: .unspecified, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+    
     /// 원본 이미지
     static func image(urlString: String, completion: @escaping (_ image: UIImage?)  -> Void ) {
         
@@ -55,9 +57,55 @@ class CacheImageManager {
         }
     }
     
+    // 중간 중간에 이미지 cancel 로직을 넣었다.
+    static func downSampledImageTask(
+        urlString: String,
+        viewSize: CGSize,
+        imageWorkItem: DispatchWorkItem,
+        completion: @escaping (_ image: UIImage?) -> Void
+    ) {
+        if let cachedData = imageDataCache.object(forKey: urlString as NSString) {
+            completion(downsample(image: cachedData, to: viewSize, scale: UIScreen.main.scale, imageWorkItem: imageWorkItem))
+            return
+        }
+        
+        APIManager.downloadImageData(urlString) { (data) in
+            guard let data: Data = data, !imageWorkItem.isCancelled else {
+                completion(nil)
+                return
+            }
+            let imageNSData = NSData(data: data)
+            imageDataCache.setObject(imageNSData, forKey: urlString as NSString)
+            let downsampledImage = downsample(image: imageNSData, to: viewSize, scale: UIScreen.main.scale)
+            completion(downsampledImage)
+        }
+        
+    }
+    
     static func downsample(image data: NSData, to pointSize: CGSize, scale: CGFloat) -> UIImage? {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else { fatalError("cannot create imageSource") }
+        
+        let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
+        let downsampleOptions =  [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceShouldCacheImmediately: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
+        
+        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) else {
+            return nil
+        }
+        return UIImage(cgImage: downsampledImage)
+    }
+    
+    static func downsample(image data: NSData, to pointSize: CGSize, scale: CGFloat, imageWorkItem: DispatchWorkItem) -> UIImage? {
+        let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+        guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else { fatalError("cannot create imageSource") }
+        
+        if imageWorkItem.isCancelled {
+            return nil
+        }
         
         let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
         let downsampleOptions =  [

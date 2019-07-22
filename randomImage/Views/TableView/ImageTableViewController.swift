@@ -228,18 +228,36 @@ extension ImageTableViewController: UITableViewDataSource {
             let individualItem = rootPageViewController.searchedItemList[indexPath.row]
             let viewFrameSize = view.frame.size
             cell.configure(individualItem.title)
-            // 아래는 다운샘플링 이미지 작업 처리
-            DispatchQueue.global().async { [weak self] in
-                guard let self = self else { return }
-                CacheImageManager.downSampledImage(urlString: individualItem.link, viewSize: self.imageViewSize(individualItem, viewFrameSize), completion: { (image, url) in
-                        guard let image = image else { return }
+            
+            // cancel 처리 ...?
+            var imageTask: DispatchWorkItem!
+            imageTask = DispatchWorkItem {
+                CacheImageManager.downSampledImageTask(
+                    urlString: individualItem.link,
+                    viewSize: self.imageViewSize(individualItem, viewFrameSize),
+                    imageWorkItem: imageTask,
+                    completion: { image in
+                        guard let image = image, !imageTask.isCancelled else { return }
                         DispatchQueue.main.async {
-                            if url == self.rootPageViewController.searchedItemList[indexPath.row].link {
-                                cell.configure(image)
-                            }
+                            cell.configure(image)
                         }
                 })
             }
+            cell.imageWorkItem = imageTask
+            CacheImageManager.downsampledImageQueue.sync(execute: imageTask)
+            
+            // 아래는 다운샘플링 이미지 작업 처리
+//            DispatchQueue.global().async { [weak self] in
+//                guard let self = self else { return }
+//                CacheImageManager.downSampledImage(urlString: individualItem.link, viewSize: self.imageViewSize(individualItem, viewFrameSize), completion: { (image, url) in
+//                        guard let image = image else { return }
+//                        DispatchQueue.main.async {
+//                            if url == self.rootPageViewController.searchedItemList[indexPath.row].link {
+//                                cell.configure(image)
+//                            }
+//                        }
+//                })
+//            }
             
             return cell
             

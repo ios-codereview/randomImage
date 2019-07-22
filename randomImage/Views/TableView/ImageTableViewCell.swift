@@ -12,6 +12,7 @@ class ImageTableViewCell: UITableViewCell, Reusable {
     
     @IBOutlet weak var imageTitle: UILabel! 
     @IBOutlet weak var centerImageView: UIImageView!
+    var imageWorkItem: DispatchWorkItem?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,7 +25,7 @@ class ImageTableViewCell: UITableViewCell, Reusable {
     }
     
     override func prepareForReuse() {
-//        centerImageView.image = nil
+        imageWorkItem?.cancel()
         centerImageView.image = UIImage(named: "defaultImage")
     }
     
