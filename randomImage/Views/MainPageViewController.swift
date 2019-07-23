@@ -90,10 +90,13 @@ class MainPageViewController: UIPageViewController {
     ///
     /// - Parameter keyword: 검색할 키워드
     func search(_ keyword: String, page number: Int, completion: @escaping (_ list: [ImageItem]?) -> Void) {
-        // indicator 추가
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         searchKeyword = keyword
         NaverAPI.search.manager.imageItems(keyword: keyword, page: number) { [weak self] (items, error) in
-            guard let self = self else { return }
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            }
+            guard let _ = self else { return }
             
             if let error = error {
                 print(error.localizedDescription)
@@ -101,7 +104,6 @@ class MainPageViewController: UIPageViewController {
             }
             
             if let items = items {
-//                self.searchedItemList.append(contentsOf: items)
                 completion(items)
             }
             
