@@ -14,7 +14,7 @@ class MainPageViewController: UIPageViewController {
     
     private let pageViewControllersType = [StoryBoardType.imageTableView, StoryBoardType.imageCollectionView]
 
-    private lazy var customPageViewControllers = Array<UIViewController?>(repeating: nil, count: self.pageViewControllersType.count)
+    private lazy var customPageViewControllers = [UIViewController?](repeating: nil, count: self.pageViewControllersType.count)
 
     private var nowPageIndex = 0
     
@@ -29,12 +29,10 @@ class MainPageViewController: UIPageViewController {
     
     var searchKeyword: String = "" {
         didSet {
-            for (index, viewController) in customPageViewControllers.enumerated() {
-                if viewController != nil, index == nowPageIndex {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.extractImageSearchController(viewController!).title = self.searchKeyword
-                    }
+            for (index, viewController) in customPageViewControllers.enumerated() where viewController != nil && index == nowPageIndex {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.extractImageSearchController(viewController!).title = self.searchKeyword
                 }
             }
         }

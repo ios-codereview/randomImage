@@ -29,7 +29,6 @@ class APIManager {
     
     // MARK: - Instance Method
     
-    // error 처리 우아하게 해보자
     func imageItems(keyword: String, page: Int, completion: @escaping (_ imageData: [ImageItem]?, _ error: Error? ) -> Void ) {
         
         apiResource.query = NaverSearchQuery(query: keyword).queryItems(start: page)
@@ -55,7 +54,7 @@ class APIManager {
                 completion(nil, error)
             }
             
-            }.resume()
+        }.resume()
         
     }
     
@@ -82,6 +81,6 @@ class APIManager {
             
             completion(data)
             
-            }.resume()
+        }.resume()
     }
 }

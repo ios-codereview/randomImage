@@ -184,16 +184,24 @@ extension ImageCollectionViewController: UICollectionViewDataSource {
             let individualItem = rootPageViewController.searchedItemList[indexPath.row]
             let cellViewSize = imageViewSize(cell)
             cell.configure(individualItem.title)
-            DispatchQueue.global().async {
-                CacheImageManager.downSampledImage(urlString: individualItem.link, viewSize: cellViewSize, completion: { (image, url) in
-                    guard let image = image else { return }
-                    DispatchQueue.main.async {
-                        if url == self.rootPageViewController.searchedItemList[indexPath.row].link {
+            
+            var imageTask: DispatchWorkItem!
+            imageTask = DispatchWorkItem {
+                CacheImageManager.downSampledImageTask(
+                    urlString: individualItem.link,
+                    viewSize: cellViewSize,
+                    imageWorkItem: imageTask,
+                    completion: { image in
+                        guard let image = image, !imageTask.isCancelled else { return }
+                        DispatchQueue.main.async {
                             cell.confifure(image)
                         }
-                    }
                 })
             }
+            
+            cell.imageWorkItem = imageTask
+            CacheImageManager.downsampledImageQueue.sync(execute: imageTask)
+            
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LoadingCollectionViewCell.reuseIdentifier, for: indexPath) as? LoadingCollectionViewCell

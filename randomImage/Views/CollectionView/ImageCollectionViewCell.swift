@@ -12,14 +12,11 @@ class ImageCollectionViewCell: UICollectionViewCell, Reusable {
 
     @IBOutlet weak var imageTitle: UILabel!
     @IBOutlet weak var centerImageView: UIImageView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    var imageWorkItem: DispatchWorkItem?
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        imageWorkItem?.cancel()
         centerImageView.image = UIImage(named: "defaultImage")
     }
     
