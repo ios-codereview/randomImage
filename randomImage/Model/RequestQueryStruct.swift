@@ -20,16 +20,15 @@ struct NaverSearchQuery: QueryStruct {
         self.query = query
     }
     
-    func queryItems(start page: Int) -> [String: Any] {
-        var queryItemsDictionary: [String: Any] = [:]
+    func queryItems(start page: Int) -> [String: String] {
+        var queryItemsDictionary: [String: String] = [:]
         let mirror = Mirror(reflecting: self)
         for child in mirror.children where child.label != nil && "\(child.value)" != "nil"{
             if child.label! == "start" {
-                queryItemsDictionary.updateValue("\(( page * display! ) + 1)",forKey: child.label!)
+                queryItemsDictionary.updateValue("\(( page * display! ) + 1)", forKey: child.label!)
             } else {
                 queryItemsDictionary.updateValue("\(NaverSearchQuery.unwrap(any: child.value))", forKey: child.label! )
             }
-            
         }
 
         return queryItemsDictionary

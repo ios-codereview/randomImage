@@ -33,7 +33,7 @@ class APIManager {
         
         apiResource.query = NaverSearchQuery(query: keyword).queryItems(start: page)
         
-        urlSession.dataTask(with: urlRequest) { (data, response, error) in
+        urlSession.dataTask(with: urlRequest) { (data, _, error) in
             
             if let error = error {
                 print(error.localizedDescription)
@@ -41,7 +41,6 @@ class APIManager {
             }
             
             guard let data = data else {
-                print("data is nil")
                 completion(nil, nil)
                 return
             }
@@ -50,7 +49,6 @@ class APIManager {
                 let responseData = try JSONDecoder().decode(NaverImageSearchResult.self, from: data)
                 completion(responseData.items, nil)
             } catch {
-                print("decode Error")
                 completion(nil, error)
             }
             
@@ -67,14 +65,13 @@ class APIManager {
             return
         }
         
-        URLSession(configuration: .default).dataTask(with: url) { (data, response, error) in
+        URLSession(configuration: .default).dataTask(with: url) { (data, _, error) in
             if let error = error {
                 print(error.localizedDescription)
                 completion(nil)
             }
             
             guard let data = data else {
-                print("data is nil")
                 completion(nil)
                 return
             }

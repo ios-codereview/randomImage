@@ -187,7 +187,7 @@ extension ImageCollectionViewController: UICollectionViewDataSource {
             
             var imageTask: DispatchWorkItem!
             imageTask = DispatchWorkItem {
-                CacheImageManager.downSampledImageTask(
+                CacheImageManager.downSampledImage(
                     urlString: individualItem.link,
                     viewSize: cellViewSize,
                     imageWorkItem: imageTask,
@@ -248,7 +248,7 @@ extension ImageCollectionViewController: UICollectionViewDelegate {
             guard
                 let image = $0,
                 let detailViewController = StoryBoardType.imageDetailView.initialViewController as? DetailViewController
-                else { fatalError("detail view error") }
+                else { return }
             detailViewController.image = image
             self.present(detailViewController, animated: true, completion: nil)
         })
@@ -257,7 +257,6 @@ extension ImageCollectionViewController: UICollectionViewDelegate {
 
 extension ImageCollectionViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        print(indexPaths)
         for indexPath in indexPaths where indexPath.section == 1 && !isNowSearching {
             isNowSearching.toggle()
             loadMoreImages()

@@ -232,7 +232,7 @@ extension ImageTableViewController: UITableViewDataSource {
             // cancel
             var imageTask: DispatchWorkItem!
             imageTask = DispatchWorkItem {
-                CacheImageManager.downSampledImageTask(
+                CacheImageManager.downSampledImage(
                     urlString: individualItem.link,
                     viewSize: self.imageViewSize(individualItem, viewFrameSize),
                     imageWorkItem: imageTask,
@@ -273,7 +273,7 @@ extension ImageTableViewController: UITableViewDelegate {
             guard
                 let image = $0,
                 let detailViewController = StoryBoardType.imageDetailView.initialViewController as? DetailViewController
-                else { fatalError("detail view error") }
+                else { return }
             detailViewController.image = image
             self.present(detailViewController, animated: true, completion: nil)
         })
@@ -285,7 +285,6 @@ extension ImageTableViewController: UITableViewDelegate {
 
 extension ImageTableViewController: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        print(indexPaths)
         for indexPath in indexPaths where indexPath.section == 1 && !isNowSearching {
             isNowSearching.toggle()
             loadMoreImages()

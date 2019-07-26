@@ -23,4 +23,3 @@ struct ImageItem: Codable {
     var sizeheight: String
     var sizewidth: String
 }
-// thumbnail 이용하지 말고 일단 link 의 이미지만 사용하자

@@ -1,6 +1,6 @@
 PODS:
-  - APIResource (0.1.0)
-  - SwiftLint (0.33.1)
+  - APIResource (0.2.1)
+  - SwiftLint (0.34.0)
 
 DEPENDENCIES:
   - APIResource
@@ -12,8 +12,8 @@ SPEC REPOS:
     - SwiftLint
 
 SPEC CHECKSUMS:
-  APIResource: d226189ebc5d6dea4faebe32162c3cb8ddcd6b99
-  SwiftLint: 9fc1143bbacec37f94994a7d0d2a85b2154b6294
+  APIResource: c31f52584a9fd21a2edebcb07796130c8efd3f13
+  SwiftLint: 79d48a17c6565dc286c37efb8322c7b450f95c67
 
 PODFILE CHECKSUM: bebd545bfc865a49209d385d36e05070f617f183
 

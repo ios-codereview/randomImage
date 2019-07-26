@@ -8,15 +8,15 @@
 
 import UIKit
 
-fileprivate let imageCache = NSCache<NSString, UIImage>()
-fileprivate let imageDataCache = NSCache<NSString, NSData>()
+private let imageCache = NSCache<NSString, UIImage>()
+private let imageDataCache = NSCache<NSString, NSData>()
 
 class CacheImageManager {
     
     static let downsampledImageQueue = DispatchQueue(label: "downsampledImage", qos: .unspecified, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     
     /// 원본 이미지
-    static func image(urlString: String, completion: @escaping (_ image: UIImage?)  -> Void ) {
+    static func image(urlString: String, completion: @escaping (_ image: UIImage?) -> Void ) {
         
         // if image already cached
         if let cachedImageData = imageDataCache.object(forKey: urlString as NSString),
@@ -37,35 +37,15 @@ class CacheImageManager {
         }
     }
     
-    /// 다운샘플링한 이미지
-    static func downSampledImage(urlString: String, viewSize: CGSize, completion: @escaping (_ image: UIImage?,_ url: String)  -> Void ) {
-        // if image already cached
-        if let cachedData = imageDataCache.object(forKey: urlString as NSString) {
-            completion(downsample(image: cachedData, to: viewSize, scale: UIScreen.main.scale), urlString)
-            return
-        }
-        
-        APIManager.downloadImageData(urlString) { (data) in
-            guard let data: Data = data else {
-                completion(nil, urlString)
-                return
-            }
-            let imageNSData = NSData(data: data)
-            imageDataCache.setObject(imageNSData, forKey: urlString as NSString)
-            let downsampledImage = downsample(image: imageNSData, to: viewSize, scale: UIScreen.main.scale)
-            completion(downsampledImage, urlString)
-        }
-    }
-    
-    // 중간 중간에 이미지 cancel 로직을 넣었다.
-    static func downSampledImageTask(
+    /// 다운샘플링한 이미지 이미 실행된 Task 들을 위해서 중간 중간에 이미지 cancel 로직을 넣었다.
+    static func downSampledImage(
         urlString: String,
         viewSize: CGSize,
         imageWorkItem: DispatchWorkItem,
         completion: @escaping (_ image: UIImage?) -> Void
     ) {
         if let cachedData = imageDataCache.object(forKey: urlString as NSString) {
-            completion(downsample(image: cachedData, to: viewSize, scale: UIScreen.main.scale, imageWorkItem: imageWorkItem))
+            completion(downSampling(image: cachedData, to: viewSize, scale: UIScreen.main.scale, imageWorkItem: imageWorkItem))
             return
         }
         
@@ -76,30 +56,17 @@ class CacheImageManager {
             }
             let imageNSData = NSData(data: data)
             imageDataCache.setObject(imageNSData, forKey: urlString as NSString)
-            let downsampledImage = downsample(image: imageNSData, to: viewSize, scale: UIScreen.main.scale)
-            completion(downsampledImage)
+            completion(downSampling(image: imageNSData, to: viewSize, scale: UIScreen.main.scale, imageWorkItem: imageWorkItem))
         }
-        
     }
     
-    static func downsample(image data: NSData, to pointSize: CGSize, scale: CGFloat) -> UIImage? {
-        let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
-        guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else { fatalError("cannot create imageSource") }
-        
-        let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
-        let downsampleOptions =  [
-            kCGImageSourceCreateThumbnailFromImageAlways: true,
-            kCGImageSourceShouldCacheImmediately: true,
-            kCGImageSourceCreateThumbnailWithTransform: true,
-            kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
-        
-        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) else {
-            return nil
-        }
-        return UIImage(cgImage: downsampledImage)
-    }
-    
-    static func downsample(image data: NSData, to pointSize: CGSize, scale: CGFloat, imageWorkItem: DispatchWorkItem) -> UIImage? {
+    /// 이미지 다운 샘플링
+    static func downSampling(
+        image data: NSData,
+        to pointSize: CGSize,
+        scale: CGFloat,
+        imageWorkItem: DispatchWorkItem) -> UIImage?
+    {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else { fatalError("cannot create imageSource") }
         
