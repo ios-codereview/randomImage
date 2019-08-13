@@ -90,7 +90,7 @@ extension DetailViewController: UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         let scale = scrollView.zoomScale
         var newImageOrigin: CGPoint {
-            if scale == 1.0 || imageView.frame.height >= view.frame.height {
+            if scale <= 1.0 || imageView.frame.height >= view.frame.height {
                 return imageView.frame.origin
             }
             let yOffset = (imageView.frame.height - imageFrame.size.height) / 2
