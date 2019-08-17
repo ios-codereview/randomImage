@@ -163,6 +163,10 @@ extension MainPageViewController: UIPageViewControllerDelegate {
 }
 
 // MARK: - UIScrollViewDelegate
+// Review: [Refactroing] UIPageViewController의 Horizontal bounce 를 비활성화하는 기능이라는 것을 명시되었으면 좋겠습니다.
+/*
+ class DisableBounceEffectDelegate: NSObject, UIScrollViewDelegate
+ */
 
 extension MainPageViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

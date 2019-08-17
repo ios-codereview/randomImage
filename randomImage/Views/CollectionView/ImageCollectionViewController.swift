@@ -20,6 +20,9 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
         }
     }
     
+    deinit {
+        print("!!!!!! deinit ImageCollectionViewController")
+    }
     // MARK: - Property
     
     weak var rootPageViewController: MainPageViewController!
@@ -66,6 +69,7 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("!!!!!! viewDidLoad ImageCollectionViewController")
         setNavigationBar()
         setCollectionView()
     }

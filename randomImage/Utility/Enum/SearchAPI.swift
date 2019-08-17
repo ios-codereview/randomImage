@@ -16,7 +16,7 @@ enum NaverAPI {
         switch self {
         case .search:
             var api = APIResource("https://openapi.naver.com/v1/search/image")
-            api.headers = [SecretKey.id.key: SecretKey.id.value, SecretKey.secret.key: SecretKey.secret.value]
+            api.headers = ["X-Naver-Client-Id": "vDnrwSb8JwlKV279nbtS", "X-Naver-Client-Secret": "eTibrDU9sZ"]
             return api
         }
     }
