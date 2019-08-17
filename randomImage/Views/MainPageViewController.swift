@@ -88,6 +88,7 @@ class MainPageViewController: UIPageViewController {
     ///
     /// - Parameter keyword: 검색할 키워드
     func search(_ keyword: String, page number: Int, completion: @escaping (_ list: [ImageItem]?) -> Void) {
+        // Review: [사용성] 네트워크 요청 시 사용자에게 Loading 을 보여주는 것이 좋지 않을까요?
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         searchKeyword = keyword
         NaverAPI.search.manager.imageItems(keyword: keyword, page: number) { [weak self] (items, error) in
@@ -155,6 +156,14 @@ extension MainPageViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard let nowPageViewController = pageViewController.viewControllers?.first,
             let pageIndex = customPageViewControllers.firstIndex(of: nowPageViewController) else {
+                // Review: [Refactoring] Debug에서만 fatalError를 호출하는 건 어떨까요?
+                /*
+                #if DEBUG
+                    fatalError("nowPageViewController Index Error")
+                #else
+                    print("index error")
+                #endif
+                */
                 fatalError("nowPageViewController Index Error")
         }
         
@@ -162,12 +171,8 @@ extension MainPageViewController: UIPageViewControllerDelegate {
     }
 }
 
-// MARK: - UIScrollViewDelegate
-// Review: [Refactroing] UIPageViewController의 Horizontal bounce 를 비활성화하는 기능이라는 것을 명시되었으면 좋겠습니다.
-/*
- class DisableBounceEffectDelegate: NSObject, UIScrollViewDelegate
- */
 
+// MARK: - UIScrollViewDelegate
 extension MainPageViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if nowPageIndex == 0 && scrollView.contentOffset.x < scrollView.bounds.size.width {

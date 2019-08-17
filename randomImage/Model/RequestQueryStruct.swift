@@ -25,6 +25,7 @@ struct NaverSearchQuery: QueryStruct {
         let mirror = Mirror(reflecting: self)
         for child in mirror.children where child.label != nil && "\(child.value)" != "nil"{
             if child.label! == "start" {
+                // Review: [Refacroing] forced unwrap (!) 은 nil이 아님을 보장하지 않습니다.
                 queryItemsDictionary.updateValue("\(( page * display! ) + 1)", forKey: child.label!)
             } else {
                 queryItemsDictionary.updateValue("\(NaverSearchQuery.unwrap(any: child.value))", forKey: child.label! )

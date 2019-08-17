@@ -170,6 +170,7 @@ class ImageTableViewController: UIViewController, ImageSearch {
             let base = (self.pageNumber-1) * 20
             let newIndexPaths = items.enumerated().map { IndexPath(row: base + $0.offset, section: 0) }
             
+            // Review: [사용성] 페이징을 요청하면 Scroll이 튀는 현상이 발생합니다.
             DispatchQueue.main.async {
                 self.tableView.beginUpdates()
                 
@@ -237,6 +238,7 @@ extension ImageTableViewController: UITableViewDataSource {
                     viewSize: self.imageViewSize(individualItem, viewFrameSize),
                     imageWorkItem: imageTask,
                     completion: { image in
+                        // Reivew: [사용성] ImageDownload 실패 시 대체 이미지를 보여주는 것이 좋지 않을까요?
                         guard let image = image, !imageTask.isCancelled else { return }
                         DispatchQueue.main.async {
                             cell.configure(image)

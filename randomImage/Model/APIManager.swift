@@ -29,6 +29,11 @@ class APIManager {
     
     // MARK: - Instance Method
     
+    // Review: [Refactoring] 유연하게 API를 호출 할 수 있도록 URLRequest 를 Parameter로 전달하는건 어떨까요?
+//    func imageItems(request: URLRequest, completion: @escaping (_ imageData: [ImageItem]?, _ error: Error? ) -> Void )
+    
+    // Review: [Refacroing] Result<[ImageItem], Error> 를 사용하는건 어떨까요?
+//    func imageItems(keyword: String, page: Int, completion: @escaping (Result<[ImageItem], Error>) -> Void )
     func imageItems(keyword: String, page: Int, completion: @escaping (_ imageData: [ImageItem]?, _ error: Error? ) -> Void ) {
         
         apiResource.query = NaverSearchQuery(query: keyword).queryItems(start: page)
@@ -64,8 +69,11 @@ class APIManager {
             completion(nil)
             return
         }
-        
-        URLSession(configuration: .default).dataTask(with: url) { (data, _, error) in
+        // Review: [Refactoring] 이미지 다운로드는 ephemeral 옵션으로 생성하는건 어떨까요?
+        // 캐시, 쿠키 또는 자격 증명에 영구 저장소를 사용하지 않는 세션 구성입니다.
+        // https://github.com/onevcat/Kingfisher/blob/master/Sources/Networking/ImageDownloader.swift
+        // Kingfisher ImageDownloader 참고
+        URLSession(configuration: .ephemeral).dataTask(with: url) { (data, _, error) in
             if let error = error {
                 print(error.localizedDescription)
                 completion(nil)

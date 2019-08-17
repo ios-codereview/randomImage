@@ -17,7 +17,8 @@ class CacheImageManager {
     
     /// 원본 이미지
     static func image(urlString: String, completion: @escaping (_ image: UIImage?) -> Void ) {
-        
+        // Review: [Refactoring] Cache와 API에서 Image를 가져오는 것은 Repository 패턴을 사용하는건 어떨까요?
+        // https://miro.medium.com/max/1400/1*UDzzNYwInvHg25V_OtWejg.jpeg
         // if image already cached
         if let cachedImageData = imageDataCache.object(forKey: urlString as NSString),
             let image = UIImage(data: cachedImageData as Data) {
@@ -50,6 +51,7 @@ class CacheImageManager {
         }
         
         APIManager.downloadImageData(urlString) { (data) in
+            //            Review: [Refactroing] 같은 작업이 이미 실행 중인지 검사도 필요하지 않을까요?
             guard let data: Data = data, !imageWorkItem.isCancelled else {
                 completion(nil)
                 return

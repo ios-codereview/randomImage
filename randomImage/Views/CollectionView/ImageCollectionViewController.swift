@@ -21,7 +21,7 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
     }
     
     deinit {
-        print("!!!!!! deinit ImageCollectionViewController")
+        print("deinit ImageCollectionViewController")
     }
     // MARK: - Property
     
@@ -69,7 +69,6 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("!!!!!! viewDidLoad ImageCollectionViewController")
         setNavigationBar()
         setCollectionView()
     }
@@ -131,6 +130,7 @@ class ImageCollectionViewController: UIViewController, ImageSearch {
     
     private func search(_ keyword: String, page number: Int) {
         rootPageViewController.search(keyword, page: number) { items in
+            
             guard let items = items else { return }
             let base = (self.pageNumber-1) * 20
             let newIndexPaths = items.enumerated().map { IndexPath(row: base + $0.offset, section: 0) }
@@ -204,7 +204,8 @@ extension ImageCollectionViewController: UICollectionViewDataSource {
             }
             
             cell.imageWorkItem = imageTask
-            CacheImageManager.downsampledImageQueue.sync(execute: imageTask)
+            // Review: [성능] async 로 동작하는게 좋지 않을까요?
+            CacheImageManager.downsampledImageQueue.async(execute: imageTask)
             
             return cell
         } else {
@@ -227,6 +228,9 @@ extension ImageCollectionViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        // Review: [성능] Image 다운로드 중인 네트워크 작업들을 취소하는것이 좋지 않을까요?
+    }
     // collectionView의 items들을 감싸는 inset에 대한 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return insetsForSections
@@ -247,6 +251,7 @@ extension ImageCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension ImageCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Review: [Refactoring] UICollectionView는 row 보다 item 이 적절하지 않을까요?
         let individualItem = rootPageViewController.searchedItemList[indexPath.row]
         CacheImageManager.image(urlString: individualItem.link, completion: {
             guard

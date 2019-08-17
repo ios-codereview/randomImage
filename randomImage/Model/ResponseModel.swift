@@ -8,6 +8,8 @@
 
 import Foundation
 
+// Review: [Refactoring] Codable -> Decodable 을 사용하는건 어떨까요?
+// encode를 사용하지 않고 decode만 사용하기 때문에 적절할 것 같습니다.
 struct NaverImageSearchResult: Codable {
     var lastBuildDate: String
     var total: Int
