@@ -265,6 +265,9 @@ extension ImageCollectionViewController: UICollectionViewDelegate {
 }
 
 extension ImageCollectionViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        // Review: [성능] Prefefetching 을 취소하는 작업도 필요하지 않을까요?
+    }
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         for indexPath in indexPaths where indexPath.section == 1 && !isNowSearching {
             isNowSearching.toggle()
